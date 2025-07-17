@@ -1,0 +1,68 @@
+# TestCoverage Mode Template
+
+## Overview
+For improving test coverage, adding missing tests, and ensuring comprehensive test suites. Use when test coverage is below targets, when adding tests for new features, or conducting testing audits.
+
+## Execution Workflow
+
+### 1. Analyze Current Coverage  
+- "I will assess the project's existing test suite and identify coverage gaps."  
+- **Run coverage report**: execute `<coverage_command>` (e.g. `pytest --cov=src --cov-report=xml`).  
+- **Load results**: parse the output or `<coverage.xml>` to find modules/functions below target threshold.  
+- **Short plan** (≤4 bullets):  
+  1. List key modules with coverage < <TARGET_%> (e.g. 80%).  
+  2. Identify critical business logic areas lacking tests.  
+  3. Note any untested edge cases or error branches.  
+  4. Prioritize modules by risk or usage frequency.  
+
+> If YOLO_MODE=off, present this analysis and await approval; else proceed.
+
+### 2. Identify Test Gaps & Scenarios  
+- **Search code**: use `codebase_search` to locate untested public functions, classes, and API endpoints.  
+- **Review requirements**: check feature specs or docs for behaviors not covered by existing tests.  
+- **Define test cases**: for each gap, outline scenarios—happy paths, edge cases, error conditions, boundary values.
+
+### 3. Write & Organize Tests  
+For each planned scenario:  
+1. **Create or update** test files under `tests/` following project conventions.  
+2. **Implement tests**:  
+   - Unit tests for pure functions.  
+   - Integration tests for module interactions or HTTP endpoints.  
+   - Mock external dependencies where appropriate.  
+3. **Use assertions** to verify both expected outputs and error handling.  
+4. **Group tests** logically (e.g. `test_<module>_coverage.py`) and add descriptive docstrings.
+
+> "Read Before Write": review existing tests for style and reuse helpers.
+
+### 4. Validate (Run & Re‑measure)  
+- **Re-run coverage**: execute `<coverage_command>` again.  
+- **Verify targets**: confirm overall and per‑module coverage meet or exceed thresholds.  
+- **Fix failures**: if any tests fail or coverage is still low, diagnose missing cases, write additional tests, and repeat.
+
+> Loop until coverage goals are achieved and all tests pass.
+
+### 5. Report (Summary)  
+In chat, provide:  
+- Coverage before vs. after (e.g. "Overall coverage from 72% → 88%").  
+- List of modules now covered and new tests added.  
+- Status: "All tests passing, coverage thresholds met."  
+- Recommendations for future tests (e.g. performance or security test suites).
+
+> Keep it concise—no full coverage reports pasted.
+
+### 6. Context Update (Persistence)  
+- **context.json**: update with  
+  ```json
+  {
+    "last_task": "TestCoverage improvements",
+    "summary": "Added X tests; coverage improved from A% to B%.",
+    "next_steps": ["Maintain coverage on new features", "Integrate coverage checks into CI"]
+  }
+  ```
+
+## Key Principles
+- Quality over quantity - focus on meaningful tests, not just coverage numbers
+- Test behavior, not implementation - write tests that verify expected outcomes
+- Cover edge cases - ensure error conditions and boundary values are tested
+- Maintain test readability - use clear test names and documentation
+- Automate coverage checks - integrate coverage thresholds into CI/CD pipeline 

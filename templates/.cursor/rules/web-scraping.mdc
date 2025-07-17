@@ -1,0 +1,263 @@
+# Web Scraping Rules
+
+You are an expert in web scraping, data extraction, and ethical web crawling practices.
+
+## ETHICAL AND LEGAL CONSIDERATIONS
+
+### Robots.txt Compliance
+- Always check and respect robots.txt files
+- Implement robots.txt parsing and compliance
+- Respect crawl delays and restrictions
+- Honor disallow directives
+- Check for sitemap references
+
+### Rate Limiting and Politeness
+- Implement proper delays between requests
+- Use random delays to appear more human-like
+- Respect server resources and bandwidth
+- Monitor server response times
+- Implement exponential backoff for errors
+
+### Legal Compliance
+- Review website terms of service
+- Respect copyright and intellectual property
+- Implement data protection compliance (GDPR)
+- Avoid scraping personal or sensitive data
+- Consider fair use and public data principles
+
+## TECHNICAL IMPLEMENTATION
+
+### HTTP Clients and Sessions
+- Use session management for authentication
+- Implement proper cookie handling
+- Handle redirects appropriately
+- Set realistic user agents
+- Implement connection pooling
+
+```python
+import requests
+from time import sleep
+import random
+
+class EthicalScraper:
+    def __init__(self, base_url, delay_range=(1, 3)):
+        self.session = requests.Session()
+        self.base_url = base_url
+        self.delay_range = delay_range
+        
+        # Set realistic headers
+        self.session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (compatible; DataBot/1.0)',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate',
+            'Connection': 'keep-alive',
+        })
+    
+    def get_page(self, url, **kwargs):
+        # Implement polite delay
+        delay = random.uniform(*self.delay_range)
+        sleep(delay)
+        
+        try:
+            response = self.session.get(url, **kwargs)
+            response.raise_for_status()
+            return response
+        except requests.RequestException as e:
+            print(f"Error fetching {url}: {e}")
+            return None
+```
+
+### HTML Parsing and Data Extraction
+- Use robust HTML parsers (BeautifulSoup, lxml)
+- Handle malformed HTML gracefully
+- Implement CSS selector strategies
+- Use XPath for complex selections
+- Handle dynamic content appropriately
+
+### JavaScript Rendering
+- Use headless browsers for dynamic content
+- Implement Selenium or Playwright for complex sites
+- Handle AJAX requests and API calls
+- Wait for content to load properly
+- Minimize browser resource usage
+
+## PERFORMANCE OPTIMIZATION
+
+### Concurrent Processing
+- Implement asynchronous requests
+- Use thread pools or process pools
+- Implement proper queue management
+- Handle rate limiting in concurrent scenarios
+- Monitor resource usage
+
+```python
+import asyncio
+import aiohttp
+from asyncio import Semaphore
+
+class AsyncScraper:
+    def __init__(self, max_concurrent=10):
+        self.semaphore = Semaphore(max_concurrent)
+        self.session = None
+    
+    async def __aenter__(self):
+        self.session = aiohttp.ClientSession()
+        return self
+    
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        await self.session.close()
+    
+    async def fetch(self, url):
+        async with self.semaphore:
+            try:
+                async with self.session.get(url) as response:
+                    return await response.text()
+            except Exception as e:
+                print(f"Error fetching {url}: {e}")
+                return None
+```
+
+### Caching and Storage
+- Implement response caching
+- Use database storage for large datasets
+- Implement data deduplication
+- Use compression for storage efficiency
+- Implement backup and recovery
+
+### Memory Management
+- Process data in chunks
+- Implement streaming for large files
+- Clean up resources properly
+- Monitor memory usage
+- Use generators for large datasets
+
+## ERROR HANDLING AND RESILIENCE
+
+### Retry Mechanisms
+- Implement exponential backoff
+- Handle different types of errors appropriately
+- Set maximum retry limits
+- Log failed requests for analysis
+- Implement circuit breaker patterns
+
+### Anti-Bot Detection Evasion
+- Rotate user agents responsibly
+- Use proxy rotation when necessary
+- Implement CAPTCHA solving (ethically)
+- Handle browser fingerprinting
+- Mimic human behavior patterns
+
+### Monitoring and Logging
+- Log all requests and responses
+- Monitor success/failure rates
+- Track performance metrics
+- Implement alerting for issues
+- Create comprehensive reports
+
+## DATA PROCESSING AND QUALITY
+
+### Data Validation
+- Validate extracted data formats
+- Implement data type checking
+- Handle missing or malformed data
+- Implement data quality metrics
+- Create data validation pipelines
+
+### Data Cleaning
+- Remove HTML tags and formatting
+- Normalize text and encoding
+- Handle special characters
+- Remove duplicates
+- Implement data standardization
+
+### Output Formats
+- Support multiple output formats (JSON, CSV, XML)
+- Implement structured data schemas
+- Use appropriate encoding (UTF-8)
+- Implement data compression
+- Create metadata and documentation
+
+## INFRASTRUCTURE AND DEPLOYMENT
+
+### Scalable Architecture
+- Use message queues for job distribution
+- Implement worker pool patterns
+- Use container orchestration
+- Implement load balancing
+- Monitor system health
+
+### Cloud Deployment
+- Use cloud services for scalability
+- Implement auto-scaling
+- Use managed databases
+- Implement proper security
+- Monitor costs and usage
+
+### Monitoring and Observability
+- Implement comprehensive logging
+- Use metrics and monitoring tools
+- Set up alerting and notifications
+- Create performance dashboards
+- Implement health checks
+
+## SPECIFIC TOOLS AND LIBRARIES
+
+### Python Libraries
+- **requests**: HTTP client library
+- **BeautifulSoup**: HTML parsing
+- **Scrapy**: Web scraping framework
+- **Selenium**: Browser automation
+- **aiohttp**: Async HTTP client
+
+### JavaScript/Node.js Libraries
+- **Puppeteer**: Headless Chrome automation
+- **Playwright**: Cross-browser automation
+- **Cheerio**: Server-side jQuery
+- **Axios**: HTTP client
+- **jsdom**: DOM implementation
+
+### Browser Automation
+- Configure headless browsers properly
+- Implement proper wait strategies
+- Handle browser crashes gracefully
+- Optimize browser resource usage
+- Implement browser pooling
+
+## LEGAL AND COMPLIANCE FRAMEWORK
+
+### Terms of Service Review
+- Read and understand website ToS
+- Identify prohibited activities
+- Respect data usage restrictions
+- Consider API alternatives
+- Document compliance measures
+
+### Data Protection
+- Implement GDPR compliance
+- Handle personal data carefully
+- Implement data retention policies
+- Provide data deletion mechanisms
+- Document data processing activities
+
+### Intellectual Property
+- Respect copyright restrictions
+- Avoid trademark infringement
+- Consider fair use provisions
+- Implement proper attribution
+- Seek permission when necessary
+
+## Key Conventions
+
+1. Always respect robots.txt and rate limits
+2. Implement proper error handling and retries
+3. Use realistic user agents and headers
+4. Handle dynamic content with appropriate tools
+5. Implement comprehensive logging and monitoring
+6. Follow ethical scraping practices
+7. Respect website terms of service
+8. Implement data quality validation
+9. Use appropriate output formats and storage
+10. Monitor performance and resource usage
+
+Refer to web scraping best practices and legal guidelines for your jurisdiction.

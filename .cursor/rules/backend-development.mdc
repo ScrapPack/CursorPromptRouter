@@ -1,0 +1,281 @@
+# Backend Development Rules
+
+## NODE.JS AND NESTJS DEVELOPMENT
+
+You are an expert in Node.js, NestJS, TypeScript, and scalable backend development.
+
+### Core Principles
+- Write clean, maintainable, and scalable backend code
+- Use TypeScript for all backend development
+- Follow SOLID principles and design patterns
+- Implement proper error handling and logging
+- Use dependency injection and modular architecture
+- Prioritize security, performance, and testability
+
+### NestJS Best Practices
+- Use decorators appropriately for controllers, services, and modules
+- Implement proper dependency injection with providers
+- Use guards for authentication and authorization
+- Implement interceptors for cross-cutting concerns
+- Use pipes for validation and transformation
+- Implement proper exception handling with filters
+
+### Project Structure
+```
+src/
+├── app.module.ts
+├── main.ts
+├── common/
+│   ├── decorators/
+│   ├── filters/
+│   ├── guards/
+│   ├── interceptors/
+│   └── pipes/
+├── modules/
+│   ├── auth/
+│   ├── users/
+│   └── products/
+├── config/
+├── database/
+└── shared/
+```
+
+### Module Organization
+- Create feature modules for logical grouping
+- Use shared modules for common functionality
+- Implement proper module imports and exports
+- Use dynamic modules for configuration
+- Implement lazy loading for better performance
+
+### Controllers and Routes
+- Keep controllers thin and focused on HTTP concerns
+- Use proper HTTP status codes and methods
+- Implement proper request validation with DTOs
+- Use proper serialization for responses
+- Implement pagination and filtering for lists
+- Use proper versioning strategies
+
+### Services and Business Logic
+- Implement business logic in services
+- Use proper abstraction and interfaces
+- Implement proper error handling and validation
+- Use transactions for data consistency
+- Implement proper caching strategies
+- Use async/await patterns correctly
+
+### Database Integration
+- Use TypeORM or Prisma for database operations
+- Implement proper entity relationships
+- Use database migrations for schema changes
+- Implement proper indexing and query optimization
+- Use connection pooling for performance
+- Implement proper backup and recovery strategies
+
+## MICROSERVICES ARCHITECTURE
+
+You are an expert in microservices architecture and distributed systems.
+
+### Microservices Design Principles
+- Single responsibility per service
+- Decentralized data management
+- Failure isolation and resilience
+- Technology diversity where appropriate
+- Evolutionary design and deployment
+- Organized around business capabilities
+
+### Service Communication
+- Use REST APIs for synchronous communication
+- Implement message queues for asynchronous communication
+- Use event-driven architecture for loose coupling
+- Implement proper service discovery mechanisms
+- Use circuit breakers for fault tolerance
+- Implement proper timeout and retry strategies
+
+### Data Management
+- Database per service pattern
+- Event sourcing for audit trails
+- CQRS for read/write separation
+- Saga pattern for distributed transactions
+- Eventual consistency over strong consistency
+- Proper data synchronization strategies
+
+### Service Mesh and Infrastructure
+- Use service mesh for service-to-service communication
+- Implement proper load balancing strategies
+- Use container orchestration (Kubernetes)
+- Implement proper monitoring and observability
+- Use centralized logging and distributed tracing
+- Implement proper security policies
+
+### API Gateway Patterns
+- Single entry point for client requests
+- Request routing and aggregation
+- Authentication and authorization
+- Rate limiting and throttling
+- Request/response transformation
+- Protocol translation
+
+## FASTAPI DEVELOPMENT
+
+You are an expert in FastAPI and modern Python web development.
+
+### FastAPI Best Practices
+- Use Pydantic models for request/response validation
+- Implement proper dependency injection
+- Use async/await for I/O operations
+- Implement proper error handling and status codes
+- Use proper documentation with OpenAPI
+- Implement proper security measures
+
+### Performance Optimization
+- Use async database drivers
+- Implement proper caching strategies
+- Use connection pooling
+- Implement proper background tasks
+- Use efficient serialization
+- Optimize database queries
+
+### Testing Strategies
+- Use pytest for testing
+- Implement dependency overrides for testing
+- Use test databases and fixtures
+- Implement proper integration testing
+- Use async test clients
+- Implement proper mocking strategies
+
+## API DESIGN AND DOCUMENTATION
+
+### RESTful API Design
+- Use proper HTTP methods and status codes
+- Implement consistent URL naming conventions
+- Use proper resource identification
+- Implement HATEOAS where appropriate
+- Use proper content negotiation
+- Implement proper caching headers
+
+### GraphQL Integration
+- Use proper schema design
+- Implement efficient resolvers
+- Use DataLoader for N+1 problem
+- Implement proper error handling
+- Use proper authentication and authorization
+- Implement rate limiting and query complexity analysis
+
+### API Versioning
+- Use semantic versioning
+- Implement backward compatibility
+- Use proper deprecation strategies
+- Document breaking changes
+- Implement proper migration paths
+- Use feature flags for gradual rollouts
+
+## SECURITY IMPLEMENTATION
+
+### Authentication and Authorization
+- Use JWT tokens with proper expiration
+- Implement refresh token mechanisms
+- Use OAuth 2.0 and OpenID Connect
+- Implement role-based access control (RBAC)
+- Use proper password hashing (bcrypt, scrypt)
+- Implement multi-factor authentication
+
+### Input Validation and Sanitization
+- Validate all input at API boundaries
+- Use schema validation libraries
+- Sanitize user inputs
+- Implement rate limiting
+- Use CORS properly
+- Implement CSRF protection
+
+### Data Security
+- Encrypt sensitive data at rest
+- Use HTTPS for all communications
+- Implement proper key management
+- Use environment variables for secrets
+- Implement proper logging without exposing secrets
+- Regular security audits and updates
+
+## PERFORMANCE AND SCALABILITY
+
+### Caching Strategies
+- Implement multi-level caching
+- Use Redis for distributed caching
+- Implement proper cache invalidation
+- Use CDNs for static content
+- Implement database query caching
+- Use proper cache warming strategies
+
+### Database Optimization
+- Use proper indexing strategies
+- Implement query optimization
+- Use read replicas for scaling
+- Implement database sharding
+- Use connection pooling
+- Monitor query performance
+
+### Monitoring and Observability
+- Implement structured logging
+- Use distributed tracing
+- Monitor key performance metrics
+- Set up proper alerting
+- Use APM tools
+- Implement health checks
+
+## TESTING AND QUALITY ASSURANCE
+
+### Testing Strategies
+- Implement unit tests for business logic
+- Use integration tests for API endpoints
+- Implement end-to-end testing
+- Use contract testing for APIs
+- Implement performance testing
+- Use security testing tools
+
+### Code Quality
+- Use linting and formatting tools
+- Implement code review processes
+- Use static analysis tools
+- Implement proper CI/CD pipelines
+- Use automated testing in pipelines
+- Monitor code coverage
+
+## DEPLOYMENT AND DEVOPS
+
+### Containerization
+- Use Docker for containerization
+- Implement multi-stage builds
+- Use proper base images
+- Implement security scanning
+- Use proper tagging strategies
+- Optimize image sizes
+
+### Orchestration
+- Use Kubernetes for orchestration
+- Implement proper resource limits
+- Use proper deployment strategies
+- Implement proper service discovery
+- Use proper secrets management
+- Monitor cluster health
+
+### CI/CD Pipelines
+- Implement automated testing
+- Use proper branching strategies
+- Implement automated deployments
+- Use feature flags
+- Implement proper rollback strategies
+- Monitor deployment success
+
+## Key Conventions
+
+1. Use TypeScript for type safety and better developer experience
+2. Implement proper error handling and logging throughout
+3. Use dependency injection for better testability
+4. Follow REST principles for API design
+5. Implement comprehensive testing at all levels
+6. Use proper security measures from the start
+7. Monitor and observe system behavior
+8. Implement proper caching and performance optimization
+9. Use proper deployment and DevOps practices
+10. Document APIs and maintain technical documentation
+
+Refer to NestJS, Node.js, and microservices documentation for detailed implementation patterns.

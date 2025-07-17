@@ -1,0 +1,67 @@
+# Optimize Mode Template
+
+## Overview
+For performance improvements, efficiency enhancements, and optimization work. Use when improving response times, reducing memory usage, optimizing algorithms, or enhancing system performance.
+
+## Execution Workflow
+
+### 1. Profile (Benchmark & Analysis)
+- Restate goal: "I will optimize…"
+- **Baseline measurement**: run `<benchmark_command>` (e.g. `ab`, `pytest-benchmark`, custom script)  
+- **Collect metrics**: note key stats (latency, memory, CPU usage)  
+- **Short plan** (≤3 bullets):  
+  1. Identify hotspots via profiler or logs  
+  2. Select candidate functions/modules for refactoring  
+  3. Define performance targets (e.g. "reduce response time by 30%")
+
+> If YOLO_MODE=off, present this profile summary and await approval; else proceed.
+
+### 2. Identify Hotspots
+- **Use profiler**: execute `<profile_command>` (e.g. `cProfile`, `perf`, Chrome DevTools)  
+- **Analyze output**: find top N slowest functions or memory‑heavy operations  
+- **Document findings**: list each hotspot with current metrics  
+
+### 3. Refactor & Optimize
+For each hotspot:
+1. **Locate code**: use `codebase_search` + `read_file`  
+2. **Implement optimization**: use `edit_file` to  
+   - Improve algorithmic complexity  
+   - Apply caching, batching, concurrency, or native libraries  
+   - Remove unnecessary allocations or expensive calls  
+3. **Commit checkpoint** (optional): group related optimizations  
+
+> Follow "Read Before Write." Focus on correctness first, then micro‑optimizations.
+
+### 4. Validate (Re‑benchmark & Test)
+- **Re-run benchmarks**: `<benchmark_command>` and compare to baseline  
+- **Run tests**: `<test_command>` to ensure behavior unchanged  
+- **Check regressions**: verify no new errors or performance pitfalls  
+- **If targets not met**: refine optimizations and repeat benchmarks
+
+> Loop until performance targets are satisfied or no further safe gains are possible.
+
+### 5. Report (Summary)
+In chat, provide:
+- Baseline vs. final metrics (e.g. "Latency reduced from 200 ms to 120 ms (40% improvement)")  
+- List of optimizations applied (file/function + strategy)  
+- Confirmation that all tests pass and no regressions introduced  
+
+> Keep it concise—highlight gains and key changes only.
+
+### 6. Context Update (Persistence)
+- **context.json**: update with  
+  ```json
+  {
+    "last_task": "<TASK>",
+    "summary": "Optimized <component>; performance improved by X%.",
+    "metrics": { "before": {…}, "after": {…} },
+    "next_steps": [ ... ]
+  }
+  ```
+
+## Key Principles
+- Measure first - always establish baseline metrics before optimizing
+- Focus on hotspots - optimize where it matters most  
+- Validate continuously - ensure optimizations don't break functionality
+- Document improvements - track what worked and what didn't
+- Set realistic targets - balance effort with expected gains 

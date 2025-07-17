@@ -1,0 +1,68 @@
+# Documentation Mode Template
+
+## Overview
+For creating and updating documentation, API docs, READMEs, and developer guides. Use when documenting new features, updating setup instructions, or creating API documentation.
+
+## Execution Workflow
+
+### 1. Analyze Code (Investigation)
+- Restate goal: "I will document…"
+- **Locate targets**: use `codebase_search` + `read_file` to find  
+  - Public functions, classes, or modules lacking docs  
+  - New features or APIs introduced in this branch  
+- **Identify style guide**: reference any existing doc guidelines or templates  
+- **Short plan** (≤3 bullets):
+  1. <Item A to document>  
+  2. <Item B to document>  
+  3. <Optional: examples or usage snippets needed>
+
+> If YOLO_MODE=off, present this diagnosis and await your approval; else proceed.
+
+### 2. Draft Docs (Writing)
+For each item in the plan:
+1. **Choose location**:  
+   - Docstrings in code (`edit_file`) for functions/classes  
+   - `docs/` directory or `README.md` for user‑facing guides  
+2. **Write content**:  
+   - Clear summary of purpose  
+   - Parameter and return value descriptions  
+   - Usage examples or code snippets  
+   - Cross‑reference related modules or external links  
+3. **Follow style**:  
+   - Adhere to project's markdown/docstring conventions  
+   - Keep tone and formatting consistent
+
+> "Read Before Write": review existing docs to match style.
+
+### 3. Validate (Style & Completeness)
+- **Run doc linter** (e.g. `markdownlint`, `pydocstyle`) to catch formatting issues  
+- **Verify coverage**: ensure all public APIs/functions are documented  
+- **Generate TOC** (if applicable) and check links resolve  
+- **Review examples**: copy‑paste sample commands/snippets to confirm accuracy
+
+> If any issues arise, return to Draft Docs to fix, then re-validate.
+
+### 4. Report (Summary)
+In chat, provide:
+- Files updated/created: list each doc file or code file with new docstrings  
+- Status: "Docs lint clean, examples verified."  
+- Any recommendations (e.g. further tutorials, diagrams)
+
+> Keep responses concise—no full doc dumps.
+
+### 5. Context Update (Persistence)
+- **context.json**: append/update  
+  ```json
+  {
+    "last_task": "<TASK>",
+    "summary": "Documented <items>; docs lint clean.",
+    "next_steps": [ ... ]
+  }
+  ```
+
+## Key Principles
+- Clarity first - write for the reader, not the writer
+- Examples matter - always include practical usage examples
+- Maintain consistency - follow existing documentation patterns
+- Link appropriately - cross-reference related content
+- Test documentation - verify examples actually work 

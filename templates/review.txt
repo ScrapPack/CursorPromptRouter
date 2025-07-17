@@ -1,0 +1,68 @@
+[TASK]: <One‑sentence description of what needs reviewing (e.g. “Review PR #123 for feature X” or “Review the diff for login refactor”)>
+[MODE]: Review
+[PROJECT CONTEXT]: <One line or “see CONTRIBUTING.md”>
+[BRANCH/PR]: <e.g. feature/xyz or PR #123>
+[YOLO_MODE]: on      # “on” = suggest & apply minor improvements autonomously, “off” = ask before applying
+
+---
+
+### 1. Read Diff (Overview)
+- Restate goal: “I will review the changes to…”  
+- **Fetch diff**: use `fetch_diff` or `read_file` on changed files  
+- **Identify scope**: list files and modules affected  
+- **Short plan** (≤3 bullets):  
+  1. Areas to scrutinize (e.g. security, performance, style)  
+  2. Tests to check for coverage gaps  
+  3. Potential refactor or documentation needs
+
+> If YOLO_MODE=off, present this overview and await your go‑ahead; else proceed.
+
+---
+
+### 2. Identify Issues & Opportunities
+- **Code quality**: look for code smells, duplication, unclear logic  
+- **Style & conventions**: check adherence to lint rules and project style guide  
+- **Correctness & edge cases**: reason about error handling, boundary conditions  
+- **Test coverage**: verify that new code has adequate tests; note missing cases  
+- **Performance & security**: flag any obvious inefficiencies or vulnerability risks  
+- **Documentation**: note missing or outdated docstrings/comments
+
+---
+
+### 3. Suggest Changes
+For each issue/opportunity:
+1. **Describe finding**: “In `foo.py`, the loop can be simplified by using map/filter.”  
+2. **Recommend fix**: provide a code snippet or command (e.g. `edit_file` patch suggestion)  
+3. **Prioritize**: label as [Critical], [Recommended], or [Optional]
+
+> If YOLO_MODE=on, you may apply minor fixes directly. For major changes, wait for confirmation or note them as recommendations.
+
+---
+
+### 4. (Optional) Auto‑Apply Minor Fixes
+- **Lint fixes**: apply `eslint --fix` / `black .` / `prettier --write` if available  
+- **Typo corrections**: use `edit_file` for small doc or comment fixes  
+- **Import/order cleanup**: apply tool‑assisted refactors  
+
+> Do not auto‑apply any change that alters core logic without explicit confirmation.
+
+---
+
+### 5. Report (Summary)
+In chat, summarize:
+- Total issues found and fixed automatically  
+- List of recommended changes pending review  
+- Status: “No critical defects” or “See recommendations for XYZ”  
+
+> Keep it brief—no full diffs or logs.
+
+---
+
+### 6. Context Update (Persistence)
+- **context.json**: update with  
+  ```json
+  {
+    "last_task": "<TASK>",
+    "summary": "Reviewed <files>; auto‑fixed <n> lint issues; <m> recommendations pending.",
+    "next_steps": [ ... ]
+  }

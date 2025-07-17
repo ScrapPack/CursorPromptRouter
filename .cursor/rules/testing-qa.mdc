@@ -1,0 +1,496 @@
+# Testing & Quality Assurance Rules
+
+You are an expert in software testing, test automation, and quality assurance practices.
+
+## Core Testing Principles
+
+- Write tests first (Test-Driven Development) or alongside code development
+- Focus on testing behavior, not implementation details
+- Maintain high test coverage while avoiding meaningless tests
+- Write clear, descriptive test names that explain the expected behavior
+- Use the Arrange-Act-Assert (AAA) pattern for test structure
+- Keep tests independent and isolated from each other
+- Mock external dependencies appropriately
+
+## JEST TESTING
+
+### Unit Testing Best Practices
+
+```javascript
+// Good test structure
+describe('UserService', () => {
+  describe('createUser', () => {
+    it('should create a user with valid data', async () => {
+      // Arrange
+      const userData = {
+        name: 'John Doe',
+        email: 'john@example.com'
+      };
+      const mockRepository = {
+        save: jest.fn().mockResolvedValue({ id: 1, ...userData })
+      };
+
+      // Act
+      const result = await userService.createUser(userData);
+
+      // Assert
+      expect(result).toEqual({
+        id: 1,
+        name: 'John Doe',
+        email: 'john@example.com'
+      });
+      expect(mockRepository.save).toHaveBeenCalledWith(userData);
+    });
+
+    it('should throw error when email is invalid', async () => {
+      // Arrange
+      const invalidUserData = {
+        name: 'John Doe',
+        email: 'invalid-email'
+      };
+
+      // Act & Assert
+      await expect(userService.createUser(invalidUserData))
+        .rejects
+        .toThrow('Invalid email format');
+    });
+  });
+});
+```
+
+### Mocking Guidelines
+
+```javascript
+// Mock external dependencies
+jest.mock('../services/emailService', () => ({
+  sendEmail: jest.fn().mockResolvedValue(true)
+}));
+
+// Mock with implementation
+jest.mock('../utils/dateUtils', () => ({
+  getCurrentDate: jest.fn(() => new Date('2023-01-01'))
+}));
+
+// Spy on existing methods
+const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+```
+
+### Snapshot Testing
+
+```javascript
+// Component snapshot testing
+import renderer from 'react-test-renderer';
+import Button from '../Button';
+
+it('renders correctly', () => {
+  const tree = renderer
+    .create(<Button type="primary">Click me</Button>)
+    .toJSON();
+  expect(tree).toMatchSnapshot();
+});
+```
+
+## REACT TESTING LIBRARY
+
+### Component Testing Best Practices
+
+```javascript
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { UserForm } from '../UserForm';
+
+describe('UserForm', () => {
+  it('should submit form with user data', async () => {
+    // Arrange
+    const mockOnSubmit = jest.fn();
+    const user = userEvent.setup();
+    
+    render(<UserForm onSubmit={mockOnSubmit} />);
+
+    // Act
+    await user.type(screen.getByLabelText(/name/i), 'John Doe');
+    await user.type(screen.getByLabelText(/email/i), 'john@example.com');
+    await user.click(screen.getByRole('button', { name: /submit/i }));
+
+    // Assert
+    await waitFor(() => {
+      expect(mockOnSubmit).toHaveBeenCalledWith({
+        name: 'John Doe',
+        email: 'john@example.com'
+      });
+    });
+  });
+
+  it('should display validation errors', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<UserForm onSubmit={jest.fn()} />);
+
+    // Act
+    await user.click(screen.getByRole('button', { name: /submit/i }));
+
+    // Assert
+    expect(screen.getByText(/name is required/i)).toBeInTheDocument();
+    expect(screen.getByText(/email is required/i)).toBeInTheDocument();
+  });
+});
+```
+
+### Testing Hooks
+
+```javascript
+import { renderHook, act } from '@testing-library/react';
+import { useCounter } from '../useCounter';
+
+describe('useCounter', () => {
+  it('should increment counter', () => {
+    const { result } = renderHook(() => useCounter(0));
+
+    act(() => {
+      result.current.increment();
+    });
+
+    expect(result.current.count).toBe(1);
+  });
+});
+```
+
+## PLAYWRIGHT E2E TESTING
+
+### Test Structure and Organization
+
+```javascript
+// playwright.config.js
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: 'html',
+  use: {
+    baseURL: 'http://localhost:3000',
+    trace: 'on-first-retry',
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+  ],
+});
+```
+
+### Page Object Model
+
+```javascript
+// pages/LoginPage.js
+export class LoginPage {
+  constructor(page) {
+    this.page = page;
+    this.emailInput = page.getByLabel('Email');
+    this.passwordInput = page.getByLabel('Password');
+    this.loginButton = page.getByRole('button', { name: 'Login' });
+    this.errorMessage = page.getByTestId('error-message');
+  }
+
+  async login(email, password) {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.loginButton.click();
+  }
+
+  async getErrorMessage() {
+    return await this.errorMessage.textContent();
+  }
+}
+```
+
+### E2E Test Examples
+
+```javascript
+import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
+
+test.describe('User Authentication', () => {
+  test('should login with valid credentials', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    
+    await page.goto('/login');
+    await loginPage.login('user@example.com', 'password123');
+    
+    await expect(page).toHaveURL('/dashboard');
+    await expect(page.getByText('Welcome back!')).toBeVisible();
+  });
+
+  test('should show error with invalid credentials', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    
+    await page.goto('/login');
+    await loginPage.login('invalid@example.com', 'wrongpassword');
+    
+    const errorMessage = await loginPage.getErrorMessage();
+    expect(errorMessage).toContain('Invalid credentials');
+  });
+});
+```
+
+### Visual Testing
+
+```javascript
+test('visual comparison', async ({ page }) => {
+  await page.goto('/');
+  await expect(page).toHaveScreenshot('homepage.png');
+});
+```
+
+## API TESTING
+
+### Integration Testing with Supertest
+
+```javascript
+import request from 'supertest';
+import app from '../app';
+
+describe('User API', () => {
+  describe('POST /api/users', () => {
+    it('should create a new user', async () => {
+      const userData = {
+        name: 'John Doe',
+        email: 'john@example.com'
+      };
+
+      const response = await request(app)
+        .post('/api/users')
+        .send(userData)
+        .expect(201);
+
+      expect(response.body).toMatchObject({
+        id: expect.any(Number),
+        name: 'John Doe',
+        email: 'john@example.com'
+      });
+    });
+
+    it('should return validation error for invalid data', async () => {
+      const invalidData = {
+        name: '',
+        email: 'invalid-email'
+      };
+
+      const response = await request(app)
+        .post('/api/users')
+        .send(invalidData)
+        .expect(400);
+
+      expect(response.body.errors).toContain('Name is required');
+      expect(response.body.errors).toContain('Invalid email format');
+    });
+  });
+});
+```
+
+## PERFORMANCE TESTING
+
+### Load Testing with Artillery
+
+```yaml
+# artillery.yml
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+scenarios:
+  - name: "User journey"
+    flow:
+      - get:
+          url: "/api/users"
+      - think: 1
+      - post:
+          url: "/api/users"
+          json:
+            name: "Test User"
+            email: "test@example.com"
+```
+
+### Lighthouse Performance Testing
+
+```javascript
+import lighthouse from 'lighthouse';
+import chromeLauncher from 'chrome-launcher';
+
+test('should meet performance benchmarks', async () => {
+  const chrome = await chromeLauncher.launch({chromeFlags: ['--headless']});
+  const options = {
+    logLevel: 'info',
+    output: 'json',
+    onlyCategories: ['performance'],
+    port: chrome.port,
+  };
+
+  const runnerResult = await lighthouse('http://localhost:3000', options);
+  const score = runnerResult.lhr.categories.performance.score * 100;
+  
+  expect(score).toBeGreaterThan(90);
+  await chrome.kill();
+});
+```
+
+## TEST DATA MANAGEMENT
+
+### Fixtures and Factories
+
+```javascript
+// fixtures/users.js
+export const validUser = {
+  name: 'John Doe',
+  email: 'john@example.com',
+  role: 'user'
+};
+
+export const adminUser = {
+  name: 'Admin User',
+  email: 'admin@example.com',
+  role: 'admin'
+};
+
+// factories/userFactory.js
+import { faker } from '@faker-js/faker';
+
+export const createUser = (overrides = {}) => ({
+  id: faker.datatype.uuid(),
+  name: faker.name.fullName(),
+  email: faker.internet.email(),
+  createdAt: faker.date.past(),
+  ...overrides
+});
+```
+
+### Database Testing
+
+```javascript
+// Setup test database
+beforeAll(async () => {
+  await database.migrate.latest();
+});
+
+beforeEach(async () => {
+  await database.seed.run();
+});
+
+afterEach(async () => {
+  await database.raw('TRUNCATE TABLE users CASCADE');
+});
+
+afterAll(async () => {
+  await database.destroy();
+});
+```
+
+## ACCESSIBILITY TESTING
+
+### Automated Accessibility Testing
+
+```javascript
+import { axe, toHaveNoViolations } from 'jest-axe';
+
+expect.extend(toHaveNoViolations);
+
+test('should not have accessibility violations', async () => {
+  const { container } = render(<MyComponent />);
+  const results = await axe(container);
+  expect(results).toHaveNoViolations();
+});
+```
+
+## SECURITY TESTING
+
+### Authentication and Authorization Tests
+
+```javascript
+describe('Authentication middleware', () => {
+  it('should reject requests without token', async () => {
+    const response = await request(app)
+      .get('/api/protected')
+      .expect(401);
+
+    expect(response.body.error).toBe('Unauthorized');
+  });
+
+  it('should reject requests with invalid token', async () => {
+    const response = await request(app)
+      .get('/api/protected')
+      .set('Authorization', 'Bearer invalid-token')
+      .expect(401);
+
+    expect(response.body.error).toBe('Invalid token');
+  });
+});
+```
+
+## TEST ORGANIZATION AND BEST PRACTICES
+
+### File Structure
+```
+tests/
+├── unit/
+│   ├── services/
+│   ├── utils/
+│   └── components/
+├── integration/
+│   ├── api/
+│   └── database/
+├── e2e/
+│   ├── pages/
+│   ├── fixtures/
+│   └── specs/
+├── performance/
+└── accessibility/
+```
+
+### Test Naming Conventions
+- Use descriptive test names that explain the expected behavior
+- Follow the pattern: "should [expected behavior] when [condition]"
+- Group related tests using describe blocks
+- Use nested describe blocks for different scenarios
+
+### Continuous Integration
+```yaml
+# .github/workflows/test.yml
+name: Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm ci
+      - run: npm run test:unit
+      - run: npm run test:integration
+      - run: npm run test:e2e
+```
+
+## Key Testing Conventions
+
+1. Write tests that focus on behavior, not implementation
+2. Use descriptive test names and organize tests logically
+3. Keep tests independent and isolated
+4. Mock external dependencies appropriately
+5. Maintain high test coverage for critical code paths
+6. Use Page Object Model for E2E tests
+7. Implement proper test data management
+8. Include accessibility and security testing
+9. Run tests in CI/CD pipeline
+10. Regularly review and refactor tests to maintain quality

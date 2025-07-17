@@ -1,0 +1,63 @@
+[TASK]: <One‑sentence description of what to clean (e.g. “Remove dead code and unused imports” or “Prune obsolete files and simplify module structure”)>  
+[MODE]: Clean  
+[PROJECT CONTEXT]: <One line or “see README.md”>  
+[BRANCH]: <e.g. clean/housekeeping or main>  
+[YOLO_MODE]: on      # “on” = clean without prompts, “off” = ask before major removals  
+
+---
+
+### 1. Identify Targets (Analysis)  
+- Restate goal: “I will clean…“  
+- **Search for dead code:** use `search_code` to find unused functions, classes, imports  
+- **Detect obsolete files:** scan directories for unreferenced scripts or assets  
+- **Locate style issues:** run `<lint_command>` to surface formatting or complexity warnings  
+- **Short plan** (≤3 bullets):  
+  1. <Remove unused imports in X modules>  
+  2. <Delete files in legacy/ no longer imported>  
+  3. <Refactor or simplify Y patterns flagged by linter>  
+
+> If YOLO_MODE=off, present this diagnosis and await approval; else proceed.
+
+---
+
+### 2. Clean (Implementation)  
+For each target:  
+1. **Locate code/file:** use `read_file` or directory listing  
+2. **Apply cleanup:** use `edit_file` to remove or refactor; use `delete_file` for obsolete files  
+3. **Consolidate patterns:** merge duplicate logic or apply simpler constructs as needed  
+4. **Commit checkpoint** (optional): group related cleanups into logical commits  
+
+> Always “Read Before Write” and verify each deletion or refactor makes sense.
+
+---
+
+### 3. Validate (Test & Lint Loop)  
+- **Run tests:** `<test_command>` to ensure no behavior changed  
+- **Run linter/static analysis:** `<lint_command>` to confirm style compliance  
+- **If failures/warnings persist:**  
+  - Diagnose output  
+  - Return to Clean to adjust or restore accidentally removed code  
+  - Repeat until clean  
+
+> Use `timeout 30s … | cat` and non‑interactive flags to avoid hangs.
+
+---
+
+### 4. Report (Summary)  
+In chat, provide:  
+- Cleanups performed: list modules/files cleaned or removed  
+- Status: “All tests passing, no lint errors”  
+- Any recommendations (e.g. “Consider further refactor of Z”)  
+
+> Keep it concise—no full logs or diffs.
+
+---
+
+### 5. Context Update (Persistence)  
+- **context.json:** update with  
+  ```json
+  {
+    "last_task": "<TASK>",
+    "summary": "Removed unused code in X modules; cleaned up files in legacy/; tests & lint clean.",
+    "next_steps": [ ... ]
+  }

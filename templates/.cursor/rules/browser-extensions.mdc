@@ -1,0 +1,280 @@
+# Browser Extension Development Rules
+
+You are an expert in browser extension development, Chrome APIs, and modern web technologies.
+
+## Core Principles
+
+- Write clean, efficient, and secure extension code
+- Follow browser extension security best practices
+- Use modern JavaScript/TypeScript with proper error handling
+- Implement proper permission management and user privacy protection
+- Ensure cross-browser compatibility where possible
+- Prioritize performance and minimal resource usage
+
+## Manifest V3 Guidelines
+
+### Manifest Structure
+```json
+{
+  "manifest_version": 3,
+  "name": "Extension Name",
+  "version": "1.0.0",
+  "description": "Extension description",
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": ["https://*/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["content.js"]
+  }],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Extension Title"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
+```
+
+### Service Workers (Background Scripts)
+- Use service workers instead of background pages in Manifest V3
+- Implement proper event-driven architecture
+- Handle extension lifecycle events properly
+- Use chrome.storage API for persistent data
+- Implement proper error handling and logging
+
+```javascript
+// Background service worker example
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'install') {
+    // Initialize extension
+    chrome.storage.local.set({
+      isEnabled: true,
+      settings: {}
+    });
+  }
+});
+
+chrome.action.onClicked.addListener((tab) => {
+  // Handle extension icon click
+  chrome.tabs.sendMessage(tab.id, {
+    action: 'toggleFeature'
+  });
+});
+```
+
+### Content Scripts
+- Minimize content script injection
+- Use proper message passing between content and background scripts
+- Implement proper DOM manipulation with error handling
+- Avoid conflicts with website JavaScript
+
+```javascript
+// Content script example
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'toggleFeature') {
+    try {
+      // Implement feature logic
+      const result = toggleFeature();
+      sendResponse({ success: true, data: result });
+    } catch (error) {
+      sendResponse({ success: false, error: error.message });
+    }
+  }
+  return true; // Keep message channel open for async response
+});
+```
+
+## Security Best Practices
+
+### Permissions
+- Request minimal necessary permissions
+- Use activeTab instead of tabs permission when possible
+- Implement runtime permission requests for sensitive features
+- Document why each permission is needed
+
+### Content Security Policy
+```json
+{
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  }
+}
+```
+
+### Data Handling
+- Sanitize all user inputs
+- Validate data from external sources
+- Use secure communication methods
+- Implement proper data encryption for sensitive information
+
+## API Usage Guidelines
+
+### Chrome Storage API
+```javascript
+// Save data
+chrome.storage.local.set({
+  key: 'value'
+}, () => {
+  if (chrome.runtime.lastError) {
+    console.error('Storage error:', chrome.runtime.lastError);
+  }
+});
+
+// Retrieve data
+chrome.storage.local.get(['key'], (result) => {
+  if (chrome.runtime.lastError) {
+    console.error('Storage error:', chrome.runtime.lastError);
+    return;
+  }
+  console.log('Value:', result.key);
+});
+```
+
+### Message Passing
+```javascript
+// Send message from content script to background
+chrome.runtime.sendMessage({
+  action: 'getData',
+  payload: { id: 123 }
+}, (response) => {
+  if (chrome.runtime.lastError) {
+    console.error('Message error:', chrome.runtime.lastError);
+    return;
+  }
+  console.log('Response:', response);
+});
+```
+
+### Tabs API
+```javascript
+// Query tabs
+chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  if (tabs.length > 0) {
+    const activeTab = tabs[0];
+    // Work with active tab
+  }
+});
+```
+
+## UI Development
+
+### Popup Development
+- Keep popup lightweight and fast-loading
+- Implement proper responsive design
+- Use modern CSS and JavaScript
+- Handle popup closure gracefully
+
+```html
+<!-- popup.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 300px;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>Extension Popup</h1>
+    <button id="actionBtn">Perform Action</button>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
+```
+
+### Options Page
+- Provide clear settings organization
+- Implement proper form validation
+- Save settings immediately or with clear save buttons
+- Provide feedback for user actions
+
+## Cross-Browser Compatibility
+
+### WebExtensions API
+- Use browser namespace for cross-browser compatibility
+- Implement polyfills where necessary
+- Test on multiple browsers (Chrome, Firefox, Edge, Safari)
+
+```javascript
+// Cross-browser compatibility
+const browser = window.browser || window.chrome;
+
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Handle message
+});
+```
+
+## Testing and Debugging
+
+### Development Practices
+- Use Chrome DevTools for debugging
+- Implement comprehensive error handling
+- Use console.log strategically for debugging
+- Test with different permission levels
+
+### Error Handling
+```javascript
+// Proper error handling pattern
+async function performAction() {
+  try {
+    const result = await chrome.storage.local.get(['settings']);
+    // Process result
+    return { success: true, data: result };
+  } catch (error) {
+    console.error('Action failed:', error);
+    return { success: false, error: error.message };
+  }
+}
+```
+
+## Performance Optimization
+
+### Resource Management
+- Minimize memory usage in content scripts
+- Use event listeners efficiently
+- Implement proper cleanup in service workers
+- Optimize image assets and bundle sizes
+
+### Lazy Loading
+- Load features on-demand
+- Use dynamic imports for large modules
+- Implement efficient caching strategies
+
+## Publishing Guidelines
+
+### Store Requirements
+- Follow platform-specific guidelines (Chrome Web Store, Firefox Add-ons, etc.)
+- Implement proper version management
+- Provide clear descriptions and screenshots
+- Handle user reviews and feedback
+
+### Privacy Policy
+- Clearly state data collection practices
+- Implement user consent mechanisms
+- Provide data deletion options
+- Follow GDPR and other privacy regulations
+
+## Key Conventions
+
+1. Follow Manifest V3 specifications strictly
+2. Implement proper error handling throughout
+3. Use minimal permissions and explain their necessity
+4. Ensure cross-browser compatibility where possible
+5. Prioritize user privacy and security
+6. Test thoroughly across different scenarios
+7. Provide clear user interface and experience
+8. Document all API usage and functionality
+9. Implement proper version control and release management
+10. Stay updated with browser extension platform changes

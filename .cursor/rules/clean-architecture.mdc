@@ -1,0 +1,279 @@
+# Clean Architecture Rules
+
+You are an expert in clean architecture, SOLID principles, Domain-Driven Design (DDD), and software architecture patterns.
+
+## CLEAN ARCHITECTURE PRINCIPLES
+
+### Core Concepts
+- Dependency rule: Dependencies point inward toward higher-level policies
+- Independence of frameworks, UI, database, and external agencies
+- Testability through proper abstraction and dependency injection
+- Separation of concerns with clear boundaries between layers
+- Business rules are isolated from external concerns
+
+### Layer Organization
+```
+┌─────────────────────────────────────┐
+│           Frameworks & Drivers       │
+│     (Web, DB, External APIs)        │
+├─────────────────────────────────────┤
+│        Interface Adapters           │
+│    (Controllers, Gateways, UI)      │
+├─────────────────────────────────────┤
+│          Application Layer          │
+│      (Use Cases, Services)          │
+├─────────────────────────────────────┤
+│            Domain Layer             │
+│     (Entities, Domain Services)     │
+└─────────────────────────────────────┘
+```
+
+### Dependency Inversion
+- High-level modules should not depend on low-level modules
+- Both should depend on abstractions (interfaces)
+- Abstractions should not depend on details
+- Details should depend on abstractions
+- Use dependency injection containers and interfaces
+
+## SOLID PRINCIPLES
+
+### Single Responsibility Principle (SRP)
+- A class should have only one reason to change
+- Separate concerns into different classes and modules
+- Each module should have a single, well-defined purpose
+- Avoid God objects and classes that do too much
+
+### Open/Closed Principle (OCP)
+- Software entities should be open for extension, closed for modification
+- Use abstractions and polymorphism for extensibility
+- Implement new features by adding new code, not changing existing code
+- Use strategy pattern, decorator pattern, and plugin architectures
+
+### Liskov Substitution Principle (LSP)
+- Objects of a superclass should be replaceable with objects of a subclass
+- Subclasses must be substitutable for their base classes
+- Maintain behavioral compatibility in inheritance hierarchies
+- Avoid strengthening preconditions or weakening postconditions
+
+### Interface Segregation Principle (ISP)
+- Clients should not be forced to depend on interfaces they don't use
+- Create small, focused interfaces rather than large, monolithic ones
+- Use role-based interfaces for different client needs
+- Avoid fat interfaces and interface pollution
+
+### Dependency Inversion Principle (DIP)
+- Depend on abstractions, not concretions
+- High-level modules should not depend on low-level modules
+- Use dependency injection and inversion of control containers
+- Define interfaces in the domain layer, implement in infrastructure
+
+## DOMAIN-DRIVEN DESIGN (DDD)
+
+### Strategic Design
+- Identify bounded contexts and their relationships
+- Use ubiquitous language within each bounded context
+- Define context maps and integration patterns
+- Implement anti-corruption layers for external system integration
+- Use event storming for domain discovery
+
+### Tactical Design Patterns
+
+#### Entities
+- Objects with identity that persists over time
+- Encapsulate business rules and invariants
+- Identity is more important than attributes
+- Implement proper equality based on identity
+
+```typescript
+class User {
+  constructor(
+    private readonly id: UserId,
+    private email: Email,
+    private name: Name
+  ) {}
+
+  changeEmail(newEmail: Email): void {
+    // Business rules and validation
+    this.email = newEmail;
+  }
+}
+```
+
+#### Value Objects
+- Immutable objects defined by their attributes
+- No identity, only value equality
+- Encapsulate business logic and validation
+- Use for concepts like money, addresses, dates
+
+```typescript
+class Money {
+  constructor(
+    private readonly amount: number,
+    private readonly currency: Currency
+  ) {
+    if (amount < 0) throw new Error('Amount cannot be negative');
+  }
+
+  add(other: Money): Money {
+    if (!this.currency.equals(other.currency)) {
+      throw new Error('Cannot add different currencies');
+    }
+    return new Money(this.amount + other.amount, this.currency);
+  }
+}
+```
+
+#### Aggregates
+- Cluster of domain objects treated as a single unit
+- Define consistency boundaries
+- Root entity controls access to the aggregate
+- Maintain invariants across the aggregate
+
+#### Domain Services
+- Stateless services for domain logic that doesn't fit in entities
+- Operations that involve multiple aggregates
+- Avoid anemic domain models by keeping logic in the domain
+
+#### Repositories
+- Abstract interface for aggregate persistence
+- Defined in domain layer, implemented in infrastructure
+- Provide collection-like interface for aggregates
+- Use specifications pattern for complex queries
+
+## HEXAGONAL ARCHITECTURE (PORTS AND ADAPTERS)
+
+### Core Concepts
+- Application core is isolated from external concerns
+- Ports define interfaces for external communication
+- Adapters implement the ports for specific technologies
+- Allows for easy testing and technology changes
+
+### Port Types
+- **Primary Ports**: Driving interfaces (use cases, APIs)
+- **Secondary Ports**: Driven interfaces (repositories, external services)
+- **Adapters**: Concrete implementations of ports
+
+### Implementation Pattern
+```typescript
+// Port (interface)
+interface UserRepository {
+  save(user: User): Promise<void>;
+  findById(id: UserId): Promise<User | null>;
+}
+
+// Adapter (implementation)
+class PostgresUserRepository implements UserRepository {
+  async save(user: User): Promise<void> {
+    // Database implementation
+  }
+  
+  async findById(id: UserId): Promise<User | null> {
+    // Database query implementation
+  }
+}
+
+// Use Case (application service)
+class CreateUserUseCase {
+  constructor(private userRepository: UserRepository) {}
+  
+  async execute(request: CreateUserRequest): Promise<void> {
+    const user = new User(request.id, request.email, request.name);
+    await this.userRepository.save(user);
+  }
+}
+```
+
+## DESIGN PATTERNS
+
+### Creational Patterns
+- **Factory Method**: Create objects without specifying exact classes
+- **Abstract Factory**: Create families of related objects
+- **Builder**: Construct complex objects step by step
+- **Singleton**: Ensure single instance (use sparingly)
+
+### Structural Patterns
+- **Adapter**: Allow incompatible interfaces to work together
+- **Decorator**: Add behavior to objects dynamically
+- **Facade**: Provide simplified interface to complex subsystem
+- **Composite**: Treat individual and composite objects uniformly
+
+### Behavioral Patterns
+- **Strategy**: Define family of algorithms and make them interchangeable
+- **Observer**: Define one-to-many dependency between objects
+- **Command**: Encapsulate requests as objects
+- **State**: Allow object behavior to change based on internal state
+
+## TESTING ARCHITECTURE
+
+### Test Pyramid
+- **Unit Tests**: Test individual components in isolation
+- **Integration Tests**: Test component interactions
+- **End-to-End Tests**: Test complete user scenarios
+- Majority of tests should be unit tests
+
+### Testing Strategies
+- Test behavior, not implementation details
+- Use test doubles (mocks, stubs, fakes) appropriately
+- Write tests first (TDD) or alongside code
+- Maintain test independence and isolation
+- Use proper assertion libraries and testing frameworks
+
+### Architecture Testing
+- Test architectural boundaries and dependencies
+- Verify layer separation and dependency rules
+- Use tools like ArchUnit for architecture tests
+- Ensure clean architecture principles are maintained
+
+## CODE QUALITY PRACTICES
+
+### Clean Code Principles
+- Write code for humans, not just computers
+- Use meaningful names for variables, functions, and classes
+- Functions should be small and do one thing
+- Avoid deep nesting and complex conditional logic
+- Use comments sparingly and for clarification only
+
+### Refactoring Techniques
+- Extract method for complex operations
+- Extract class when responsibilities grow
+- Move method to appropriate class
+- Replace conditional with polymorphism
+- Eliminate duplicate code
+
+### Error Handling
+- Use exceptions for exceptional cases
+- Define clear error hierarchies
+- Fail fast and provide meaningful error messages
+- Implement proper logging and monitoring
+- Use result types for expected failures
+
+## PERFORMANCE CONSIDERATIONS
+
+### Scalability Patterns
+- CQRS (Command Query Responsibility Segregation)
+- Event Sourcing for audit trails and replay capability
+- Database per service in microservices
+- Read replicas and caching strategies
+- Asynchronous processing with message queues
+
+### Optimization Guidelines
+- Profile before optimizing
+- Focus on algorithms and data structures first
+- Use caching appropriately
+- Optimize database queries and indexes
+- Consider eventual consistency for better performance
+
+## Key Conventions
+
+1. Follow dependency rule strictly - dependencies point inward
+2. Use interfaces for all external dependencies
+3. Keep business logic in the domain layer
+4. Use value objects for complex data types
+5. Implement proper error handling and validation
+6. Write comprehensive tests at all levels
+7. Maintain clear separation of concerns
+8. Use meaningful names and clear abstractions
+9. Refactor continuously to maintain code quality
+10. Document architectural decisions and trade-offs
+
+Refer to Clean Architecture, DDD, and SOLID principles documentation for detailed implementation guidance.

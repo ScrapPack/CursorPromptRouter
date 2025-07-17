@@ -1,0 +1,28 @@
+[TASK]: <One‑sentence description of the new project or feature scaffold to set up (e.g. “Bootstrap a new Python web service project” or “Initialize React frontend for dashboard”)>  
+[MODE]: Setup  
+[PROJECT CONTEXT]: <One line or “see README.md”>  
+[BRANCH]: <e.g. setup/initial‑scaffold or main>  
+[YOLO_MODE]: on      # “on” = scaffold & install without prompts, “off” = ask before major steps  
+
+---
+
+### 1. Initialize Environment  
+- Restate goal: “I will bootstrap the project environment for <TASK>.”  
+- **Clone/Checkout**: ensure you’re in the correct repo and branch (`git clone` / `git checkout`).  
+- **Sandbox**: create or activate an isolated workspace (virtualenv, Docker container, or devbox).  
+- **Lockfile snapshot**: if upgrading an existing project, snapshot current `Pipfile.lock` / `package-lock.json` for rollback.  
+
+---
+
+### 2. Scaffold Project Structure  
+- **Directories & files**: create standard folders (e.g. `src/`, `tests/`, `docs/`, `config/`) and placeholders (`__init__.py`, `README.md`, `.gitignore`).  
+- **Version control**: run `git init` (if new) and commit scaffold (`git add . && git commit -m "chore: initial scaffold"`).  
+- **Config templates**: generate baseline configs (`pyproject.toml`, `package.json`, `tsconfig.json`, `Dockerfile`, CI config).  
+- **Environment vars**: add sample `.env.example` with placeholder keys.
+
+---
+
+### 3. Install Dependencies  
+- **Install core libs**: run `<install_command>` (e.g. `pip install fastapi uvicorn` or `npm install react react-dom`).  
+- **Generate lockfile**: run `pip freeze > requirements.lock` or let npm/yarn produce `package-lock.json`/`yarn.lock`.  
+- **Non‑interactive flags**: use `--yes`/`--no‑save`/`DEBIAN_FRONTEND=noninteractive` where relevant_

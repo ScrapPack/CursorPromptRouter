@@ -1,0 +1,67 @@
+# Setup Mode Template
+
+## Overview
+For project initialization, scaffolding, and environment setup. Use when bootstrapping new projects, setting up development environments, or initializing new features/modules from scratch.
+
+## Execution Workflow
+
+### 1. Initialize Environment  
+- Restate goal: "I will bootstrap the project environment for <TASK>."  
+- **Clone/Checkout**: ensure you're in the correct repo and branch (`git clone` / `git checkout`).  
+- **Sandbox**: create or activate an isolated workspace (virtualenv, Docker container, or devbox).  
+- **Lockfile snapshot**: if upgrading an existing project, snapshot current `Pipfile.lock` / `package-lock.json` for rollback.  
+
+### 2. Scaffold Project Structure  
+- **Directories & files**: create standard folders (e.g. `src/`, `tests/`, `docs/`, `config/`) and placeholders (`__init__.py`, `README.md`, `.gitignore`).  
+- **Version control**: run `git init` (if new) and commit scaffold (`git add . && git commit -m "chore: initial scaffold"`).  
+- **Config templates**: generate baseline configs (`pyproject.toml`, `package.json`, `tsconfig.json`, `Dockerfile`, CI config).  
+- **Environment vars**: add sample `.env.example` with placeholder keys.
+
+### 3. Install Dependencies  
+- **Install core libs**: run `<install_command>` (e.g. `pip install fastapi uvicorn` or `npm install react react-dom`).  
+- **Generate lockfile**: run `pip freeze > requirements.lock` or let npm/yarn produce `package-lock.json`/`yarn.lock`.  
+- **Non‑interactive flags**: use `--yes`/`--no‑save`/`DEBIAN_FRONTEND=noninteractive` where relevant.
+
+### 4. Configure Development Tools
+- **Linting & formatting**: setup `eslint`, `prettier`, `black`, `flake8` configs.
+- **Testing framework**: initialize test runner (`jest`, `pytest`, `mocha`) with sample tests.
+- **Build tools**: configure bundlers, compilers, or build scripts.
+- **IDE setup**: create workspace settings, debug configs, or editor-specific files.
+
+### 5. Create Initial Implementation
+- **Entry points**: create main application files with basic structure.
+- **Core modules**: implement essential components or services.
+- **Configuration**: setup environment-based configs and secrets management.
+- **Basic documentation**: create initial README with setup instructions.
+
+### 6. Validate Setup
+- **Build test**: run `<build_command>` to ensure compilation works.
+- **Dependency check**: verify all dependencies install correctly.
+- **Initial tests**: run test suite to confirm everything is working.
+- **Environment check**: test development and production configurations.
+
+### 7. Report (Summary)
+In chat, provide:
+- Project structure created: list main directories and files.
+- Dependencies installed: core libraries and tools.
+- Development tools configured: linting, testing, build tools.
+- Status: "Setup complete, all tests passing."
+- Next steps: initial features to implement or configurations to adjust.
+
+### 8. Context Update (Persistence)
+- **context.json**: update with  
+  ```json
+  {
+    "last_task": "<TASK>",
+    "summary": "Bootstrapped <project_type> with <tech_stack>; setup complete.",
+    "tech_stack": ["<framework>", "<language>", "<tools>"],
+    "next_steps": ["Implement core features", "Setup CI/CD", "Add documentation"]
+  }
+  ```
+
+## Key Principles
+- Follow conventions - use established patterns for the technology stack
+- Start minimal - create a working foundation before adding complexity
+- Document everything - make setup reproducible for other developers
+- Test early - ensure the basic setup works before building features
+- Use best practices - configure linting, testing, and security from the start 

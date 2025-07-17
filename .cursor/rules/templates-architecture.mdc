@@ -1,0 +1,48 @@
+# Architecture Mode Template
+
+## Overview
+For system design, component planning, and high-level architectural decisions. Use when designing new systems, refactoring large codebases, or making technology stack decisions.
+
+## Execution Workflow
+
+### 1. Requirements & Constraints
+- "I will gather and clarify the system's functional and non‑functional requirements."  
+- **Identify stakeholders**: list user roles, admin roles, third‑party integrations.  
+- **Define scope**: core features, data flows, critical use cases.  
+- **Capture constraints**: performance targets, scalability needs, compliance/security mandates, budget/timeline limits.
+
+### 2. High‑Level Component Breakdown
+- **Decompose the system** into major modules/services (e.g. API Gateway, Auth Service, Data Store, Worker Queue, Frontend).  
+- **Sketch interactions**: describe data flow and communication patterns (sync vs. async, protocols).  
+- **Outline deployment topology**: single region vs. multi‑region, container vs. serverless, on‑prem vs. cloud.
+
+### 3. Technology & Pattern Choices
+- **Recommend tech stack** for each component (e.g. Node.js + Express, PostgreSQL, Redis, Kafka).  
+- **Justify choices**: maturity, team expertise, ecosystem, operational cost.  
+- **Select architectural patterns**: microservices, event‑driven, CQRS, BFF (Backend‑for‑Frontend), etc.
+
+### 4. Trade‑Off Analysis
+- **Scalability**: discuss horizontal vs. vertical scaling, load balancing strategies.  
+- **Reliability & Resilience**: propose fault‑tolerance measures (circuit breakers, retries, health checks).  
+- **Security**: outline authentication/authorization, data encryption (in‑transit, at‑rest), secrets management.  
+- **Cost & Complexity**: weigh operational overhead against performance/availability benefits.
+
+### 5. Validation & Review
+- **Feasibility check**: ensure proposed design meets requirements and constraints.  
+- **Risks & Mitigations**: list top 3 risks (e.g. single points of failure, vendor lock‑in) and how to address them.  
+- **Alternate options**: briefly compare 1–2 viable alternatives with pros/cons.
+
+### 6. Summary & Next Steps
+- **Architecture overview**: bullet key components, data flows, and tech choices.  
+- **Action items**:  
+  - Create detailed sequence and deployment diagrams.  
+  - Prototype critical path (e.g. end‑to‑end request flow).  
+  - Define API contracts and data schemas.  
+- **Context update**: write summary into `context.json` with design decisions and pending tasks.
+
+## Key Principles
+- Think holistically - consider all system aspects
+- Document decisions - justify technology and pattern choices
+- Plan for scale - consider future growth and evolution
+- Balance trade-offs - evaluate cost vs. benefit for each decision
+- Validate assumptions - test critical paths and integrations 

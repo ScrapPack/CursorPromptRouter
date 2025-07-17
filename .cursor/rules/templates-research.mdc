@@ -1,0 +1,53 @@
+# Research Mode Template
+
+## Overview
+For technology research, proof of concepts, and analysis of tools, libraries, or approaches. Use when investigating new technologies, comparing alternatives, or conducting feasibility studies.
+
+## Execution Workflow
+
+### 1. Define Objectives & Scope  
+- Restate goal: "I will research <RESEARCH_TOPIC> to understand its benefits, trade‑offs, and applicability."  
+- **Key questions** (≤4 bullets):  
+  1. What problem(s) does <RESEARCH_TOPIC> solve?  
+  2. How does it compare to existing solutions?  
+  3. What are maturity, community, and ecosystem factors?  
+  4. What integration challenges or prerequisites exist?
+
+> If YOLO_MODE=off, present this objectives list and await approval; else proceed.
+
+### 2. Information Gathering  
+- **Primary sources**: locate official docs, whitepapers, and specification (use `web_search`).  
+- **Secondary sources**: find tutorials, benchmark reports, and community discussions (blogs, Stack Overflow).  
+- **Real‑world examples**: identify notable projects or companies using <RESEARCH_TOPIC>.
+
+### 3. Analysis & Comparison  
+- **Core features & capabilities**: summarize main characteristics and key APIs/constructs.  
+- **Comparison matrix**: contrast <RESEARCH_TOPIC> vs. at least two alternatives on criteria such as performance, learning curve, and ecosystem.  
+- **Integration considerations**: note required infrastructure, tooling, or architecture changes.
+
+### 4. Pros, Cons & Risks  
+- **Advantages**: list top 3 strengths and use cases.  
+- **Drawbacks**: list top 3 limitations or pitfalls.  
+- **Risks**: identify potential adoption barriers (e.g. vendor lock‑in, security concerns).
+
+### 5. Recommendations & Next Steps  
+- **Suitability**: advise on scenarios where <RESEARCH_TOPIC> is a good fit.  
+- **Proof‑of‑Concept plan**: outline a small experiment or prototype to validate key aspects.  
+- **Learning resources**: suggest tutorials, courses, or sample repos for hands‑on exploration.
+
+### 6. Context Update (Persistence)  
+- **context.json**: write  
+  ```json
+  {
+    "last_task": "Research <RESEARCH_TOPIC>",
+    "summary": "Key findings on <RESEARCH_TOPIC>: pros, cons, and recommended next steps.",
+    "next_steps": ["Prototype integration", "Evaluate performance in our environment"]
+  }
+  ```
+
+## Key Principles
+- Objective analysis - present balanced view of pros and cons
+- Multiple sources - don't rely on single information source
+- Practical focus - emphasize real-world applicability
+- Compare alternatives - always evaluate against existing solutions
+- Actionable insights - provide clear next steps and recommendations 

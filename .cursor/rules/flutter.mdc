@@ -1,0 +1,810 @@
+# Flutter Development Rules
+
+You are an expert in Flutter, Dart, and cross-platform mobile app development.
+
+## Core Flutter Principles
+
+- Write efficient, maintainable Flutter applications using Dart
+- Follow Flutter's widget-based architecture and composition patterns
+- Leverage Flutter's reactive programming model with streams and state management
+- Ensure consistent UI/UX across platforms while respecting platform conventions
+- Optimize for performance and battery life
+
+## Widget Architecture
+
+### Stateless vs Stateful Widgets
+```dart
+// Good: Use StatelessWidget for immutable UI
+class UserProfile extends StatelessWidget {
+  const UserProfile({
+    Key? key,
+    required this.user,
+    this.onEdit,
+  }) : super(key: key);
+
+  final User user;
+  final VoidCallback? onEdit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        children: [
+          CircleAvatar(
+            backgroundImage: NetworkImage(user.avatarUrl),
+            radius: 40,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            user.name,
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          Text(
+            user.email,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          if (onEdit != null)
+            ElevatedButton(
+              onPressed: onEdit,
+              child: const Text('Edit Profile'),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+// Good: Use StatefulWidget for mutable state
+class CounterWidget extends StatefulWidget {
+  const CounterWidget({Key? key}) : super(key: key);
+
+  @override
+  State<CounterWidget> createState() => _CounterWidgetState();
+}
+
+class _CounterWidgetState extends State<CounterWidget> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          'Counter: $_counter',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        ElevatedButton(
+          onPressed: _incrementCounter,
+          child: const Text('Increment'),
+        ),
+      ],
+    );
+  }
+}
+```
+
+### Custom Widgets and Composition
+```dart
+// Good: Create reusable custom widgets
+class CustomButton extends StatelessWidget {
+  const CustomButton({
+    Key? key,
+    required this.onPressed,
+    required this.child,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.padding,
+  }) : super(key: key);
+
+  final VoidCallback? onPressed;
+  final Widget child;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final EdgeInsetsGeometry? padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: backgroundColor,
+        foregroundColor: foregroundColor,
+        padding: padding ?? const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
+      ),
+      child: child,
+    );
+  }
+}
+
+// Good: Widget composition over inheritance
+class LoginForm extends StatefulWidget {
+  const LoginForm({
+    Key? key,
+    required this.onLogin,
+  }) : super(key: key);
+
+  final Future<void> Function(String email, String password) onLogin;
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      await widget.onLogin(
+        _emailController.text,
+        _passwordController.text,
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          TextFormField(
+            controller: _emailController,
+            decoration: const InputDecoration(
+              labelText: 'Email',
+              hintText: 'Enter your email',
+            ),
+            keyboardType: TextInputType.emailAddress,
+            validator: (value) {
+              if (value?.isEmpty ?? true) {
+                return 'Email is required';
+              }
+              if (!value!.contains('@')) {
+                return 'Enter a valid email';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _passwordController,
+            decoration: const InputDecoration(
+              labelText: 'Password',
+              hintText: 'Enter your password',
+            ),
+            obscureText: true,
+            validator: (value) {
+              if (value?.isEmpty ?? true) {
+                return 'Password is required';
+              }
+              if (value!.length < 6) {
+                return 'Password must be at least 6 characters';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 24),
+          CustomButton(
+            onPressed: _isLoading ? null : _handleLogin,
+            child: _isLoading
+                ? const CircularProgressIndicator()
+                : const Text('Login'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+## State Management
+
+### Provider Pattern
+```dart
+// Model class
+class User {
+  final String id;
+  final String name;
+  final String email;
+
+  const User({
+    required this.id,
+    required this.name,
+    required this.email,
+  });
+
+  User copyWith({
+    String? name,
+    String? email,
+  }) {
+    return User(
+      id: id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+    );
+  }
+}
+
+// ChangeNotifier for state management
+class UserProvider extends ChangeNotifier {
+  User? _user;
+  bool _isLoading = false;
+  String? _error;
+
+  User? get user => _user;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
+
+  Future<void> loadUser(String userId) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      _user = await UserRepository.getUser(userId);
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateUser(User updatedUser) async {
+    try {
+      await UserRepository.updateUser(updatedUser);
+      _user = updatedUser;
+      notifyListeners();
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+    }
+  }
+}
+
+// Using Provider in widgets
+class UserScreen extends StatelessWidget {
+  const UserScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('User Profile')),
+      body: Consumer<UserProvider>(
+        builder: (context, userProvider, child) {
+          if (userProvider.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (userProvider.error != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Error: ${userProvider.error}'),
+                  ElevatedButton(
+                    onPressed: () => userProvider.loadUser('user-id'),
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          final user = userProvider.user;
+          if (user == null) {
+            return const Center(child: Text('No user data'));
+          }
+
+          return UserProfile(
+            user: user,
+            onEdit: () => _showEditDialog(context, userProvider),
+          );
+        },
+      ),
+    );
+  }
+}
+```
+
+### BLoC Pattern
+```dart
+// Events
+abstract class UserEvent {}
+
+class LoadUser extends UserEvent {
+  final String userId;
+  LoadUser(this.userId);
+}
+
+class UpdateUser extends UserEvent {
+  final User user;
+  UpdateUser(this.user);
+}
+
+// States
+abstract class UserState {}
+
+class UserInitial extends UserState {}
+
+class UserLoading extends UserState {}
+
+class UserLoaded extends UserState {
+  final User user;
+  UserLoaded(this.user);
+}
+
+class UserError extends UserState {
+  final String message;
+  UserError(this.message);
+}
+
+// BLoC
+class UserBloc extends Bloc<UserEvent, UserState> {
+  final UserRepository userRepository;
+
+  UserBloc({required this.userRepository}) : super(UserInitial()) {
+    on<LoadUser>(_onLoadUser);
+    on<UpdateUser>(_onUpdateUser);
+  }
+
+  Future<void> _onLoadUser(LoadUser event, Emitter<UserState> emit) async {
+    emit(UserLoading());
+    try {
+      final user = await userRepository.getUser(event.userId);
+      emit(UserLoaded(user));
+    } catch (e) {
+      emit(UserError(e.toString()));
+    }
+  }
+
+  Future<void> _onUpdateUser(UpdateUser event, Emitter<UserState> emit) async {
+    try {
+      await userRepository.updateUser(event.user);
+      emit(UserLoaded(event.user));
+    } catch (e) {
+      emit(UserError(e.toString()));
+    }
+  }
+}
+
+// Using BLoC in widgets
+class UserBlocScreen extends StatelessWidget {
+  const UserBlocScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => UserBloc(
+        userRepository: context.read<UserRepository>(),
+      )..add(LoadUser('user-id')),
+      child: const UserBlocView(),
+    );
+  }
+}
+
+class UserBlocView extends StatelessWidget {
+  const UserBlocView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('User Profile')),
+      body: BlocBuilder<UserBloc, UserState>(
+        builder: (context, state) {
+          if (state is UserLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (state is UserError) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Error: ${state.message}'),
+                  ElevatedButton(
+                    onPressed: () => context.read<UserBloc>().add(LoadUser('user-id')),
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          if (state is UserLoaded) {
+            return UserProfile(
+              user: state.user,
+              onEdit: () => _showEditDialog(context),
+            );
+          }
+
+          return const Center(child: Text('No data'));
+        },
+      ),
+    );
+  }
+}
+```
+
+## Navigation and Routing
+
+### Go Router Implementation
+```dart
+// routes.dart
+final router = GoRouter(
+  initialLocation: '/',
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const HomeScreen(),
+      routes: [
+        GoRoute(
+          path: '/user/:userId',
+          builder: (context, state) {
+            final userId = state.params['userId']!;
+            return UserScreen(userId: userId);
+          },
+        ),
+        GoRoute(
+          path: '/settings',
+          builder: (context, state) => const SettingsScreen(),
+          routes: [
+            GoRoute(
+              path: '/profile',
+              builder: (context, state) => const ProfileScreen(),
+            ),
+          ],
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/login',
+      builder: (context, state) => const LoginScreen(),
+    ),
+  ],
+  redirect: (context, state) {
+    final isLoggedIn = AuthService.isLoggedIn;
+    final isLoginRoute = state.location == '/login';
+
+    if (!isLoggedIn && !isLoginRoute) {
+      return '/login';
+    }
+
+    if (isLoggedIn && isLoginRoute) {
+      return '/';
+    }
+
+    return null;
+  },
+);
+
+// Navigation usage
+class NavigationExample extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () => context.go('/user/123'),
+          child: const Text('Go to User'),
+        ),
+        ElevatedButton(
+          onPressed: () => context.push('/settings/profile'),
+          child: const Text('Push Profile'),
+        ),
+        ElevatedButton(
+          onPressed: () => context.pop(),
+          child: const Text('Go Back'),
+        ),
+      ],
+    );
+  }
+}
+```
+
+## Performance Optimization
+
+### ListView and GridView Optimization
+```dart
+// Good: Use ListView.builder for large lists
+class OptimizedListView extends StatelessWidget {
+  const OptimizedListView({
+    Key? key,
+    required this.items,
+  }) : super(key: key);
+
+  final List<Item> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return ListTile(
+          leading: CircleAvatar(
+            backgroundImage: NetworkImage(item.imageUrl),
+          ),
+          title: Text(item.title),
+          subtitle: Text(item.description),
+          onTap: () => _handleItemTap(context, item),
+        );
+      },
+    );
+  }
+
+  void _handleItemTap(BuildContext context, Item item) {
+    context.push('/item/${item.id}');
+  }
+}
+
+// Good: Use const constructors
+class OptimizedWidget extends StatelessWidget {
+  const OptimizedWidget({
+    Key? key,
+    required this.title,
+    required this.onPressed,
+  }) : super(key: key);
+
+  final String title;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 16), // const for immutable widgets
+        Text(title),
+        const SizedBox(height: 8),
+        ElevatedButton(
+          onPressed: onPressed,
+          child: const Text('Press Me'),
+        ),
+      ],
+    );
+  }
+}
+```
+
+### Image and Network Optimization
+```dart
+// Good: Optimized image loading
+class OptimizedImage extends StatelessWidget {
+  const OptimizedImage({
+    Key? key,
+    required this.imageUrl,
+    this.width,
+    this.height,
+  }) : super(key: key);
+
+  final String imageUrl;
+  final double? width;
+  final double? height;
+
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
+      width: width,
+      height: height,
+      fit: BoxFit.cover,
+      placeholder: (context, url) => Container(
+        width: width,
+        height: height,
+        color: Colors.grey[300],
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+      errorWidget: (context, url, error) => Container(
+        width: width,
+        height: height,
+        color: Colors.grey[300],
+        child: const Icon(Icons.error),
+      ),
+    );
+  }
+}
+
+// Good: HTTP client with proper error handling
+class ApiService {
+  static final _dio = Dio();
+
+  static Future<T> get<T>(
+    String endpoint,
+    T Function(Map<String, dynamic>) fromJson,
+  ) async {
+    try {
+      final response = await _dio.get(endpoint);
+      return fromJson(response.data);
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 404) {
+        throw NotFoundException('Resource not found');
+      } else if (e.response?.statusCode == 401) {
+        throw UnauthorizedException('Unauthorized access');
+      } else {
+        throw NetworkException('Network error: ${e.message}');
+      }
+    }
+  }
+}
+```
+
+## Testing
+
+### Widget Testing
+```dart
+// widget_test.dart
+void main() {
+  group('LoginForm Widget Tests', () {
+    testWidgets('should display email and password fields', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LoginForm(
+              onLogin: (email, password) async {},
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(TextFormField), findsNWidgets(2));
+      expect(find.text('Email'), findsOneWidget);
+      expect(find.text('Password'), findsOneWidget);
+      expect(find.text('Login'), findsOneWidget);
+    });
+
+    testWidgets('should validate empty email', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LoginForm(
+              onLogin: (email, password) async {},
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Login'));
+      await tester.pump();
+
+      expect(find.text('Email is required'), findsOneWidget);
+    });
+
+    testWidgets('should call onLogin with correct credentials', (tester) async {
+      String? capturedEmail;
+      String? capturedPassword;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LoginForm(
+              onLogin: (email, password) async {
+                capturedEmail = email;
+                capturedPassword = password;
+              },
+            ),
+          ),
+        ),
+      );
+
+      await tester.enterText(
+        find.byType(TextFormField).first,
+        'test@example.com',
+      );
+      await tester.enterText(
+        find.byType(TextFormField).last,
+        'password123',
+      );
+
+      await tester.tap(find.text('Login'));
+      await tester.pump();
+
+      expect(capturedEmail, 'test@example.com');
+      expect(capturedPassword, 'password123');
+    });
+  });
+}
+```
+
+### Unit Testing
+```dart
+// test/user_provider_test.dart
+void main() {
+  group('UserProvider Tests', () {
+    late UserProvider userProvider;
+    late MockUserRepository mockRepository;
+
+    setUp(() {
+      mockRepository = MockUserRepository();
+      userProvider = UserProvider();
+    });
+
+    test('should load user successfully', () async {
+      // Arrange
+      const user = User(
+        id: '1',
+        name: 'John Doe',
+        email: 'john@example.com',
+      );
+      when(mockRepository.getUser('1')).thenAnswer((_) async => user);
+
+      // Act
+      await userProvider.loadUser('1');
+
+      // Assert
+      expect(userProvider.user, user);
+      expect(userProvider.isLoading, false);
+      expect(userProvider.error, null);
+    });
+
+    test('should handle load user error', () async {
+      // Arrange
+      when(mockRepository.getUser('1')).thenThrow(Exception('Network error'));
+
+      // Act
+      await userProvider.loadUser('1');
+
+      // Assert
+      expect(userProvider.user, null);
+      expect(userProvider.isLoading, false);
+      expect(userProvider.error, 'Exception: Network error');
+    });
+  });
+}
+```
+
+## Best Practices Summary
+
+### Code Organization
+- Use clear folder structure (lib/screens, lib/widgets, lib/models, lib/services)
+- Keep widgets small and focused on single responsibility
+- Extract common functionality into reusable widgets
+- Use proper naming conventions (camelCase, PascalCase)
+
+### Performance
+- Use const constructors for immutable widgets
+- Implement ListView.builder for large lists
+- Cache network images appropriately
+- Avoid expensive operations in build methods
+- Use Keys for widget identity when needed
+
+### State Management
+- Choose appropriate state management solution (Provider, BLoC, Riverpod)
+- Keep business logic separate from UI logic
+- Use immutable data models
+- Handle loading and error states consistently
+
+### Platform Integration
+- Follow platform-specific design guidelines
+- Use platform channels for native functionality
+- Test on both iOS and Android devices
+- Handle platform differences gracefully
+
+Follow Flutter best practices and leverage Dart's features for efficient cross-platform development.

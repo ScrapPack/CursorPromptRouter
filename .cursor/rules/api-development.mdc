@@ -1,0 +1,716 @@
+# API Development Rules
+
+You are an expert in API design, REST principles, GraphQL, OpenAPI specifications, and scalable API architecture.
+
+## REST API Design Principles
+
+### HTTP Methods and Status Codes
+- Use appropriate HTTP methods (GET, POST, PUT, PATCH, DELETE)
+- Return proper HTTP status codes consistently
+- Implement idempotent operations for PUT and DELETE
+- Use PATCH for partial updates
+- Follow REST conventions for resource naming
+
+### Resource Design
+```javascript
+// Good: Resource-based URLs
+GET    /api/users                 // Get all users
+GET    /api/users/{id}           // Get specific user
+POST   /api/users                // Create new user
+PUT    /api/users/{id}           // Update entire user
+PATCH  /api/users/{id}           // Partial user update
+DELETE /api/users/{id}           // Delete user
+
+// Nested resources
+GET    /api/users/{id}/posts     // Get user's posts
+POST   /api/users/{id}/posts     // Create post for user
+
+// Bad: Action-based URLs
+POST   /api/createUser
+GET    /api/getUserById/{id}
+POST   /api/updateUser/{id}
+```
+
+### Request/Response Formats
+```javascript
+// Consistent response structure
+{
+  "data": {
+    "id": "123",
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "meta": {
+    "timestamp": "2023-10-01T12:00:00Z",
+    "version": "1.0"
+  }
+}
+
+// Error response structure
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Invalid input data",
+    "details": [
+      {
+        "field": "email",
+        "message": "Invalid email format"
+      }
+    ]
+  },
+  "meta": {
+    "timestamp": "2023-10-01T12:00:00Z",
+    "request_id": "req_123"
+  }
+}
+
+// Pagination structure
+{
+  "data": [...],
+  "pagination": {
+    "page": 1,
+    "per_page": 20,
+    "total": 100,
+    "total_pages": 5,
+    "has_next": true,
+    "has_prev": false
+  }
+}
+```
+
+## API Versioning Strategies
+
+### URL Versioning
+```javascript
+// Version in URL path
+app.use('/api/v1', v1Routes);
+app.use('/api/v2', v2Routes);
+
+// Version in subdomain
+// v1.api.example.com
+// v2.api.example.com
+```
+
+### Header Versioning
+```javascript
+// Accept header versioning
+app.use((req, res, next) => {
+  const acceptHeader = req.get('Accept');
+  if (acceptHeader && acceptHeader.includes('application/vnd.api+json;version=2')) {
+    req.apiVersion = 'v2';
+  } else {
+    req.apiVersion = 'v1';
+  }
+  next();
+});
+
+// Custom header versioning
+app.use((req, res, next) => {
+  req.apiVersion = req.get('API-Version') || 'v1';
+  next();
+});
+```
+
+## OpenAPI Specification
+
+### OpenAPI 3.0 Structure
+```yaml
+openapi: 3.0.3
+info:
+  title: User Management API
+  description: API for managing users and their data
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: api-support@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: https://staging-api.example.com/v1
+    description: Staging server
+
+paths:
+  /users:
+    get:
+      summary: Get all users
+      description: Retrieve a paginated list of users
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of users per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - email
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User's email address
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: User's full name
+        created_at:
+          type: string
+          format: date-time
+          description: User creation timestamp
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        email: "john.doe@example.com"
+        name: "John Doe"
+        created_at: "2023-10-01T12:00:00Z"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+```
+
+### Documentation Best Practices
+- Use clear, descriptive summaries and descriptions
+- Provide realistic examples for all schemas
+- Document all possible response codes
+- Include authentication requirements
+- Use consistent naming conventions
+- Provide contact information and license details
+
+## GraphQL API Design
+
+### Schema Design
+```graphql
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  posts: [Post!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  author: User!
+  published: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Query {
+  user(id: ID!): User
+  users(
+    first: Int
+    after: String
+    filter: UserFilter
+  ): UserConnection!
+  
+  post(id: ID!): Post
+  posts(
+    first: Int
+    after: String
+    filter: PostFilter
+  ): PostConnection!
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): CreateUserPayload!
+  updateUser(id: ID!, input: UpdateUserInput!): UpdateUserPayload!
+  deleteUser(id: ID!): DeleteUserPayload!
+  
+  createPost(input: CreatePostInput!): CreatePostPayload!
+  updatePost(id: ID!, input: UpdatePostInput!): UpdatePostPayload!
+  deletePost(id: ID!): DeletePostPayload!
+}
+
+input CreateUserInput {
+  email: String!
+  name: String!
+}
+
+input UpdateUserInput {
+  email: String
+  name: String
+}
+
+type CreateUserPayload {
+  user: User
+  errors: [UserError!]!
+}
+
+type UserError {
+  field: String
+  message: String!
+  code: String!
+}
+```
+
+### Resolver Patterns
+```javascript
+const resolvers = {
+  Query: {
+    user: async (parent, { id }, context) => {
+      return await context.dataSources.userAPI.getUserById(id);
+    },
+    
+    users: async (parent, { first, after, filter }, context) => {
+      return await context.dataSources.userAPI.getUsers({
+        first,
+        after,
+        filter
+      });
+    }
+  },
+  
+  Mutation: {
+    createUser: async (parent, { input }, context) => {
+      try {
+        const user = await context.dataSources.userAPI.createUser(input);
+        return { user, errors: [] };
+      } catch (error) {
+        return {
+          user: null,
+          errors: [{
+            field: error.field,
+            message: error.message,
+            code: error.code
+          }]
+        };
+      }
+    }
+  },
+  
+  User: {
+    posts: async (user, args, context) => {
+      // Avoid N+1 queries using DataLoader
+      return context.loaders.userPosts.load(user.id);
+    }
+  }
+};
+```
+
+### Performance Optimization
+- Use DataLoader for batching and caching
+- Implement query complexity analysis
+- Set query depth limits
+- Use field-level caching
+- Implement proper pagination with connections
+
+## Authentication and Authorization
+
+### JWT Implementation
+```javascript
+const jwt = require('jsonwebtoken');
+
+// JWT middleware
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ error: 'Access token required' });
+  }
+  
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: 'Invalid or expired token' });
+    }
+    
+    req.user = user;
+    next();
+  });
+};
+
+// Role-based authorization
+const requireRole = (roles) => {
+  return (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    next();
+  };
+};
+
+// Usage
+app.get('/api/admin/users', 
+  authenticateToken, 
+  requireRole(['admin']), 
+  getUsersController
+);
+```
+
+### API Key Authentication
+```javascript
+const validateApiKey = async (req, res, next) => {
+  const apiKey = req.headers['x-api-key'];
+  
+  if (!apiKey) {
+    return res.status(401).json({ error: 'API key required' });
+  }
+  
+  try {
+    const keyInfo = await ApiKey.findOne({ key: apiKey, active: true });
+    
+    if (!keyInfo) {
+      return res.status(401).json({ error: 'Invalid API key' });
+    }
+    
+    // Rate limiting per API key
+    await checkRateLimit(apiKey);
+    
+    req.apiKey = keyInfo;
+    next();
+  } catch (error) {
+    res.status(500).json({ error: 'Authentication error' });
+  }
+};
+```
+
+## Rate Limiting and Throttling
+
+### Implementation Strategies
+```javascript
+const rateLimit = require('express-rate-limit');
+const RedisStore = require('rate-limit-redis');
+const redis = require('redis');
+
+const redisClient = redis.createClient();
+
+// Basic rate limiting
+const createRateLimit = (windowMs, max, message) => {
+  return rateLimit({
+    store: new RedisStore({
+      client: redisClient,
+      prefix: 'rl:'
+    }),
+    windowMs,
+    max,
+    message: { error: message },
+    standardHeaders: true,
+    legacyHeaders: false
+  });
+};
+
+// Different limits for different endpoints
+app.use('/api/auth', createRateLimit(15 * 60 * 1000, 5, 'Too many auth attempts'));
+app.use('/api/upload', createRateLimit(60 * 1000, 10, 'Upload rate limit exceeded'));
+app.use('/api', createRateLimit(15 * 60 * 1000, 100, 'General rate limit exceeded'));
+
+// Per-user rate limiting
+const userRateLimit = rateLimit({
+  keyGenerator: (req) => req.user?.id || req.ip,
+  windowMs: 15 * 60 * 1000,
+  max: (req) => {
+    // Different limits based on user plan
+    return req.user?.plan === 'premium' ? 1000 : 100;
+  }
+});
+```
+
+## Error Handling Standards
+
+### Error Response Format
+```javascript
+class APIError extends Error {
+  constructor(message, statusCode, code, details = []) {
+    super(message);
+    this.statusCode = statusCode;
+    this.code = code;
+    this.details = details;
+    this.isOperational = true;
+  }
+}
+
+// Error mapping
+const errorHandler = (err, req, res, next) => {
+  let error = { ...err };
+  error.message = err.message;
+  
+  // Mongoose validation error
+  if (err.name === 'ValidationError') {
+    const details = Object.values(err.errors).map(val => ({
+      field: val.path,
+      message: val.message
+    }));
+    
+    error = new APIError('Validation Error', 400, 'VALIDATION_ERROR', details);
+  }
+  
+  // Mongoose duplicate key error
+  if (err.code === 11000) {
+    const field = Object.keys(err.keyValue)[0];
+    error = new APIError(
+      `${field} already exists`, 
+      400, 
+      'DUPLICATE_FIELD',
+      [{ field, message: `${field} must be unique` }]
+    );
+  }
+  
+  // JWT errors
+  if (err.name === 'JsonWebTokenError') {
+    error = new APIError('Invalid token', 401, 'INVALID_TOKEN');
+  }
+  
+  res.status(error.statusCode || 500).json({
+    error: {
+      message: error.message || 'Server Error',
+      code: error.code || 'INTERNAL_ERROR',
+      details: error.details || [],
+      ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    },
+    meta: {
+      timestamp: new Date().toISOString(),
+      request_id: req.id
+    }
+  });
+};
+```
+
+## API Testing Strategies
+
+### Integration Testing
+```javascript
+const request = require('supertest');
+const app = require('../app');
+
+describe('User API', () => {
+  let authToken;
+  
+  beforeAll(async () => {
+    // Setup test data and get auth token
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({
+        email: 'test@example.com',
+        password: 'password123'
+      });
+    
+    authToken = response.body.token;
+  });
+  
+  describe('GET /api/users', () => {
+    it('should return paginated users', async () => {
+      const response = await request(app)
+        .get('/api/users?page=1&limit=10')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+      
+      expect(response.body.data).toBeInstanceOf(Array);
+      expect(response.body.pagination).toHaveProperty('page', 1);
+      expect(response.body.pagination).toHaveProperty('total');
+    });
+    
+    it('should return 401 without auth token', async () => {
+      await request(app)
+        .get('/api/users')
+        .expect(401);
+    });
+  });
+});
+```
+
+### Contract Testing
+```javascript
+// Using Pact for contract testing
+const { Pact } = require('@pact-foundation/pact');
+const path = require('path');
+
+const provider = new Pact({
+  consumer: 'UserService',
+  provider: 'UserAPI',
+  port: 1234,
+  log: path.resolve(process.cwd(), 'logs', 'pact.log'),
+  dir: path.resolve(process.cwd(), 'pacts'),
+  logLevel: 'INFO'
+});
+
+describe('User API Contract', () => {
+  beforeAll(() => provider.setup());
+  afterAll(() => provider.finalize());
+  
+  describe('GET /users', () => {
+    beforeEach(() => {
+      return provider.addInteraction({
+        state: 'users exist',
+        uponReceiving: 'a request for all users',
+        withRequest: {
+          method: 'GET',
+          path: '/api/users',
+          headers: {
+            'Authorization': 'Bearer token123'
+          }
+        },
+        willRespondWith: {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: {
+            data: [{
+              id: '1',
+              name: 'John Doe',
+              email: 'john@example.com'
+            }]
+          }
+        }
+      });
+    });
+    
+    it('should return users', async () => {
+      // Test implementation
+    });
+  });
+});
+```
+
+## API Monitoring and Analytics
+
+### Metrics Collection
+```javascript
+const prometheus = require('prom-client');
+
+// Custom metrics
+const httpRequestDuration = new prometheus.Histogram({
+  name: 'http_request_duration_seconds',
+  help: 'Duration of HTTP requests in seconds',
+  labelNames: ['method', 'route', 'status_code']
+});
+
+const httpRequestTotal = new prometheus.Counter({
+  name: 'http_requests_total',
+  help: 'Total number of HTTP requests',
+  labelNames: ['method', 'route', 'status_code']
+});
+
+// Middleware to collect metrics
+const metricsMiddleware = (req, res, next) => {
+  const start = Date.now();
+  
+  res.on('finish', () => {
+    const duration = (Date.now() - start) / 1000;
+    const route = req.route?.path || req.path;
+    
+    httpRequestDuration
+      .labels(req.method, route, res.statusCode)
+      .observe(duration);
+    
+    httpRequestTotal
+      .labels(req.method, route, res.statusCode)
+      .inc();
+  });
+  
+  next();
+};
+
+app.use(metricsMiddleware);
+
+// Metrics endpoint
+app.get('/metrics', (req, res) => {
+  res.set('Content-Type', prometheus.register.contentType);
+  res.end(prometheus.register.metrics());
+});
+```
+
+## API Documentation and Client Generation
+
+### Auto-generating Documentation
+```javascript
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'User API',
+      version: '1.0.0',
+      description: 'A simple Express User API'
+    },
+    servers: [
+      {
+        url: 'http://localhost:3000',
+        description: 'Development server'
+      }
+    ]
+  },
+  apis: ['./routes/*.js'] // Path to the API docs
+};
+
+const specs = swaggerJsdoc(options);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Retrieve a list of users
+ *     tags: [Users]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Page number
+ *     responses:
+ *       200:
+ *         description: List of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ */
+```
+
+Follow REST API design principles, OpenAPI specifications, and industry standards for scalable API development.

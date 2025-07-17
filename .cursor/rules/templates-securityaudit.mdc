@@ -1,0 +1,59 @@
+# SecurityAudit Mode Template
+
+## Overview
+For comprehensive security assessments, vulnerability scanning, and security best practices evaluation. Use when performing security audits, scanning for vulnerabilities, or implementing security improvements.
+
+## Execution Workflow
+
+### 1. Reconnaissance & Context Gathering  
+- "I will perform a comprehensive security assessment of the codebase and configuration."  
+- **Project scan**: use `codebase_search` to locate all source files, config directories, infrastructure‑as‑code (Terraform, CloudFormation), Dockerfiles, and CI/CD pipelines.  
+- **Environment review**: identify runtime environments (e.g. Node, Python, Docker) and load any project‑specific security guidelines or compliance requirements.  
+
+### 2. Static Application Security Testing (SAST)  
+- **Run SAST tools**: execute built‑in or external scanners (`semgrep`, `bandit`, `eslint-plugin-security`, etc.) against source code.  
+- **Analyze output**: collect findings for injection flaws, unsafe deserialization, path traversal, insecure use of cryptography, and other OWASP Top 10 issues.  
+- **Iterate**: for each SAST finding, note severity, location, and suggested remediation.  
+
+### 3. Dependency & Supply‑Chain Vulnerability Scanning  
+- **Lockfile audit**: run `npm audit`, `yarn audit`, `pip-audit`, or `snyk test` on lockfiles (`package-lock.json`, `Pipfile.lock`, etc.).  
+- **Outdated libs**: list dependencies with known CVEs or end‑of‑life status.  
+- **Risk profiling**: rank vulnerabilities by CVSS score and exploitability.  
+
+### 4. Secret & Credential Exposure Detection  
+- **Pattern search**: use `grep_search` or secret‑scanning tools (`trufflehog`, `git-secrets`) to find keys, tokens, passwords, or private certs in code history.  
+- **Config review**: inspect `.env`, YAML/JSON config for hard‑coded secrets or overly permissive defaults.  
+- **Remediation**: recommend vaulting secrets (e.g. HashiCorp Vault, AWS Secrets Manager) and rotating any exposed credentials.  
+
+### 5. Infrastructure & Configuration Audit  
+- **Infrastructure‑as‑Code (IaC)**: run scanners (`tfsec`, `checkov`) on Terraform/CloudFormation for misconfigurations (e.g. open security groups, public S3 buckets).  
+- **Container images**: scan Dockerfiles and built images (`clair`, `grype`) for vulnerable packages and improper privileges.  
+- **CI/CD pipelines**: inspect workflow definitions for secrets leakage, inadequate approval steps, or excessive permissions.  
+
+### 6. Dynamic Application Security Testing (DAST)  
+- **Smoke‑test**: start the application in a staging environment.  
+- **Automated DAST**: run an HTTP scanner (`OWASP ZAP`, `Nikto`) against each endpoint.  
+- **Fuzzing**: use a basic fuzzer (`ffuf`, `wfuzz`) on input fields and APIs to detect crashes or unhandled exceptions.  
+
+### 7. Manual Review & Business Logic Checks  
+- **Access control**: verify role‑based access, endpoint authorization, and data‑leak prevention.  
+- **Error handling**: ensure no sensitive info leaks in stack traces or error messages.  
+- **Logging & monitoring**: confirm secure log practices (no PII), proper log rotation, and alerting on suspicious activity.  
+
+### 8. Reporting & Remediation Plan  
+- **Findings summary**: list issues by category (SAST, dependencies, secrets, IaC, DAST, manual).  
+- **Severity & priority**: assign critical/high/medium/low ratings.  
+- **Remediation steps**: give concrete code/config changes or tool configuration recommendations for each issue.  
+- **Context update**: write to `context.json` a brief audit report with key metrics (e.g. number of vulnerabilities, critical CVEs, secrets found).  
+
+### 9. Follow‑Up & Continuous Improvement  
+- **Automate scans**: schedule this audit template to run periodically (e.g. weekly) via CI.  
+- **Track progress**: add unresolved items to issue tracker with clear owners and due dates.  
+- **Security culture**: recommend adding pre‑commit hooks or git‑hook secret scanners and integrating security checks into developer workflows.  
+
+## Key Principles
+- Defense in depth - check all layers from code to infrastructure
+- Automate where possible - use tools to scale security analysis
+- Prioritize by risk - focus on critical and high-severity issues first
+- Remediate systematically - provide actionable steps for each finding
+- Continuous monitoring - embed security checks into development workflow 

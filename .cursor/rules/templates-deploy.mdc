@@ -1,0 +1,59 @@
+# Deploy Mode Template
+
+## Overview
+For deployment workflows, CI/CD pipeline management, and release operations. Use when deploying to staging/production, setting up CI/CD, or managing release processes.
+
+## Execution Workflow
+
+### 1. Build & Package  
+- "I will package the application and prepare deployable artifacts."  
+- **Checkout branch**: ensure you're on the correct branch (`git checkout <branch>`).  
+- **Install dependencies**: run `<install_command>` (e.g. `npm ci`, `pip install -r requirements.txt`).  
+- **Compile/build**: execute `<build_command>` (e.g. `npm run build`, `mvn package`).  
+- **Bundle artifacts**: create artifacts (e.g. Docker image, JAR, ZIP) and tag with version/commit SHA.  
+
+### 2. Release to Staging/Production  
+- **Push artifacts**:  
+  - Docker: `docker push <registry>/<image>:<tag>`  
+  - Package repo: `aws s3 cp`, `npm publish`, etc.  
+- **Trigger deployment**: invoke CI/CD pipeline or use IaC/CLI (e.g. `kubectl apply`, `terraform apply`) to deploy to staging or production.  
+- **Version tagging**: tag the Git commit (`git tag -a vX.Y.Z -m "Release vX.Y.Z"`) and push tags.  
+
+### 3. Smoke Tests & Verification  
+- **Health checks**: call health‑endpoint(s) or ping service (`curl <staging‑url>/health`).  
+- **Smoke tests**: run a minimal test suite against deployed environment (e.g. `npm run test:smoke -- --env=staging`).  
+- **Monitor logs**: tail logs or check dashboards for errors.  
+- **Approval gating** (if YOLO=off): present smoke results and await sign‑off before promoting to production.  
+
+### 4. Rollback Plan & Safety Checks  
+- **Define rollback**: know the command or pipeline step to revert to previous version (`kubectl rollout undo`, `aws deploy rollback`).  
+- **Backup data**: ensure database or stateful data is backed up if schema changes were included.  
+- **Permissions & secrets**: verify that deployment did not expose credentials or require manual secret rotation.  
+
+### 5. Report (Summary)  
+In chat, provide:  
+- Artifact details: image/tag or package version deployed.  
+- Environments updated: staging and/or production.  
+- Smoke test results: "All endpoints healthy, no errors."  
+- Rollback status: "Rollback plan verified."  
+- Next steps: monitor metrics, inform stakeholders.  
+
+> Keep it concise—no full logs or manifest dumps.  
+
+### 6. Context Update (Persistence)  
+- **context.json**: update with  
+  ```json
+  {
+    "last_task": "Deploy to <environment>",
+    "summary": "Built v<version>, deployed to <env>, smoke tests passed.",
+    "artifacts": ["<artifact1>", "<artifact2>"],
+    "next_steps": ["Monitor uptime", "Cleanup old versions"]
+  }
+  ```
+
+## Key Principles
+- Safety first - always test before production deployment
+- Rollback ready - have a quick rollback plan prepared
+- Monitor actively - watch logs and metrics during deployment
+- Version everything - tag releases and artifacts clearly
+- Automate where possible - use CI/CD for consistent deployments 

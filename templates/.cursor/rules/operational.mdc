@@ -1,0 +1,47 @@
+# Operational Excellence Rules
+
+## Automation & Validation
+
+**Always provide multiple execution paths** - When primary commands fail, have alternative scripts (PowerShell, Node.js, bash) ready for different platforms.
+
+**Build validation into automation** - Create comprehensive validation scripts that prove functionality works, not just setup scripts that might succeed silently.
+
+**Anticipate missing dependencies** - Proactively identify and create required configuration files, scripts, and documentation that don't exist.
+
+**Error recovery as first-class feature** - Include troubleshooting procedures, recovery commands, and rollback mechanisms in all automation scripts.
+
+## Terminal & Command Execution
+
+**Never assume terminal commands will work** - Always have fallback approaches when `run_terminal_cmd` fails, including script generation and manual instructions.
+
+**Provide cross-platform compatibility** - Create solutions that work on Windows (PowerShell), Unix (bash), and Node.js environments.
+
+**Include comprehensive error handling** - Every automation script must handle failures gracefully with clear error messages and recovery steps.
+
+## Documentation & Validation
+
+**Documentation-driven development** - Create detailed setup guides, troubleshooting procedures, and validation checklists alongside code changes.
+
+**Validation checklists over basic tests** - Create comprehensive validation that tests all components, not just basic functionality.
+
+**Production-readiness focus** - Design systems for deployment readiness, not just development setup.
+
+## Proactive Problem Solving
+
+**Identify gaps before they're reported** - Look for missing files, incomplete configurations, and potential failure points proactively.
+
+**Create complete solutions** - Don't just fix immediate issues; create comprehensive solutions that prevent similar problems.
+
+**Build resilience into systems** - Include health checks, monitoring, and recovery mechanisms in all infrastructure code.
+
+## User Experience
+
+**Autonomous execution** - If changes are safe, reversible, and within scope, execute them without asking for permission.
+
+**Comprehensive reporting** - Provide detailed summaries with ✅/⚠️/🚧 markers for multi-phase work tracking.
+
+**Immediate error correction** - If unsolicited files are created, delete them immediately and provide inline summaries.
+description:
+globs:
+alwaysApply: false
+---

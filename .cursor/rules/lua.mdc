@@ -1,0 +1,478 @@
+# Lua Scripting Rules
+
+You are an expert in Lua scripting, configuration, and embedded Lua development.
+
+## CORE LUA PRINCIPLES
+
+### Language Fundamentals
+- Lua is dynamically typed with automatic memory management
+- Tables are the primary data structure (arrays, objects, maps)
+- Functions are first-class values
+- Coroutines provide cooperative multitasking
+- Metatables enable powerful object-oriented programming
+
+### Basic Syntax Guidelines
+- Use snake_case for variables and functions
+- Use PascalCase for module names and constructors
+- Keep lines under 80 characters when possible
+- Use 2 or 4 spaces for indentation consistently
+- End statements with semicolons only when necessary for clarity
+
+```lua
+-- Good naming conventions
+local user_name = "john_doe"
+local MAX_CONNECTIONS = 100
+
+function calculate_total(items)
+    local total = 0
+    for _, item in pairs(items) do
+        total = total + item.price
+    end
+    return total
+end
+```
+
+## TABLE OPERATIONS AND PATTERNS
+
+### Table Construction
+- Use consistent table construction patterns
+- Prefer array-style tables for sequences
+- Use hash-style tables for key-value pairs
+- Initialize tables with appropriate default values
+- Use table.insert() and table.remove() for array operations
+
+```lua
+-- Array-style table
+local fruits = {"apple", "banana", "orange"}
+
+-- Hash-style table
+local config = {
+    host = "localhost",
+    port = 8080,
+    timeout = 30
+}
+
+-- Mixed table (avoid when possible)
+local mixed = {
+    "first_item",  -- [1]
+    "second_item", -- [2]
+    name = "example",
+    count = 42
+}
+```
+
+### Table Manipulation
+- Use ipairs() for array-like tables with consecutive indices
+- Use pairs() for hash-like tables or mixed tables
+- Implement proper nil checking for table values
+- Use table methods for common operations
+- Handle sparse arrays carefully
+
+```lua
+-- Iterating over arrays
+for i, value in ipairs(array) do
+    print(i, value)
+end
+
+-- Iterating over hash tables
+for key, value in pairs(hash_table) do
+    print(key, value)
+end
+
+-- Safe table access
+local function safe_get(tbl, key, default)
+    return tbl[key] or default
+end
+```
+
+## FUNCTION DESIGN AND SCOPE
+
+### Function Definitions
+- Use local functions when scope allows
+- Implement proper parameter validation
+- Return multiple values when appropriate
+- Use closures for encapsulation
+- Implement tail call optimization when possible
+
+```lua
+-- Local function with validation
+local function divide(a, b)
+    assert(type(a) == "number", "First argument must be a number")
+    assert(type(b) == "number", "Second argument must be a number")
+    assert(b ~= 0, "Division by zero not allowed")
+    return a / b
+end
+
+-- Function returning multiple values
+local function parse_name(full_name)
+    local first, last = full_name:match("(%S+)%s+(%S+)")
+    return first, last
+end
+
+-- Closure example
+local function create_counter()
+    local count = 0
+    return function()
+        count = count + 1
+        return count
+    end
+end
+```
+
+### Variable Scope Management
+- Prefer local variables over global variables
+- Initialize variables at the narrowest scope possible
+- Use do...end blocks for temporary scope
+- Avoid polluting the global namespace
+- Use proper module patterns
+
+```lua
+-- Proper scoping
+local function process_data(data)
+    local result = {}
+    
+    -- Temporary scope for processing
+    do
+        local temp_value = calculate_something(data)
+        if temp_value > threshold then
+            result.status = "high"
+        end
+    end
+    
+    return result
+end
+```
+
+## ERROR HANDLING AND VALIDATION
+
+### Error Handling Patterns
+- Use assert() for precondition checking
+- Use pcall() and xpcall() for error protection
+- Implement custom error types when needed
+- Return nil and error message for recoverable errors
+- Use proper error propagation
+
+```lua
+-- Using pcall for error protection
+local function safe_operation(data)
+    local success, result = pcall(risky_function, data)
+    if success then
+        return result
+    else
+        return nil, "Operation failed: " .. result
+    end
+end
+
+-- Custom error handling
+local function validate_config(config)
+    if not config then
+        return nil, "Config is required"
+    end
+    
+    if not config.host then
+        return nil, "Host configuration is missing"
+    end
+    
+    return true
+end
+```
+
+### Input Validation
+- Validate function parameters at entry points
+- Use type checking functions
+- Implement range checking for numeric values
+- Validate table structure when expected
+- Provide clear error messages
+
+```lua
+local function create_user(name, age, email)
+    -- Type validation
+    assert(type(name) == "string", "Name must be a string")
+    assert(type(age) == "number", "Age must be a number")
+    assert(type(email) == "string", "Email must be a string")
+    
+    -- Range validation
+    assert(age >= 0 and age <= 150, "Age must be between 0 and 150")
+    
+    -- Format validation
+    assert(email:match("@"), "Email must contain @ symbol")
+    
+    return {
+        name = name,
+        age = age,
+        email = email
+    }
+end
+```
+
+## MODULE PATTERNS AND ORGANIZATION
+
+### Module Creation
+- Use proper module patterns for code organization
+- Export only necessary functions and variables
+- Use local variables for private functionality
+- Implement proper initialization patterns
+- Version your modules when appropriate
+
+```lua
+-- Module pattern
+local M = {}
+
+-- Private variables and functions
+local private_data = {}
+
+local function private_helper()
+    -- Internal implementation
+end
+
+-- Public interface
+function M.public_function(param)
+    return private_helper(param)
+end
+
+function M.create_instance(config)
+    local instance = {}
+    -- Instance implementation
+    return instance
+end
+
+return M
+```
+
+### Configuration Management
+- Use tables for configuration data
+- Implement configuration validation
+- Support environment-specific configs
+- Use reasonable defaults
+- Document configuration options
+
+```lua
+-- Configuration module
+local config = {
+    database = {
+        host = os.getenv("DB_HOST") or "localhost",
+        port = tonumber(os.getenv("DB_PORT")) or 5432,
+        name = os.getenv("DB_NAME") or "myapp",
+    },
+    
+    server = {
+        port = tonumber(os.getenv("PORT")) or 8080,
+        workers = tonumber(os.getenv("WORKERS")) or 4,
+    },
+    
+    logging = {
+        level = os.getenv("LOG_LEVEL") or "info",
+        file = os.getenv("LOG_FILE") or "app.log",
+    }
+}
+
+return config
+```
+
+## METATABLE AND OOP PATTERNS
+
+### Object-Oriented Programming
+- Use metatables for object-oriented designs
+- Implement proper inheritance patterns
+- Use __index metamethod for method lookup
+- Implement constructors and destructors
+- Use proper encapsulation techniques
+
+```lua
+-- Class-like pattern using metatables
+local Person = {}
+Person.__index = Person
+
+function Person.new(name, age)
+    local self = setmetatable({}, Person)
+    self.name = name
+    self.age = age
+    return self
+end
+
+function Person:get_name()
+    return self.name
+end
+
+function Person:celebrate_birthday()
+    self.age = self.age + 1
+end
+
+-- Inheritance example
+local Employee = setmetatable({}, {__index = Person})
+Employee.__index = Employee
+
+function Employee.new(name, age, job_title)
+    local self = Person.new(name, age)
+    setmetatable(self, Employee)
+    self.job_title = job_title
+    return self
+end
+
+function Employee:get_job_title()
+    return self.job_title
+end
+```
+
+### Metamethod Implementation
+- Implement appropriate metamethods for custom behavior
+- Use __tostring for string representation
+- Use __call to make tables callable
+- Implement comparison metamethods when needed
+- Use __gc for cleanup when necessary
+
+```lua
+-- Metamethod examples
+local Vector = {}
+Vector.__index = Vector
+
+function Vector.new(x, y)
+    return setmetatable({x = x, y = y}, Vector)
+end
+
+function Vector.__add(a, b)
+    return Vector.new(a.x + b.x, a.y + b.y)
+end
+
+function Vector.__tostring(v)
+    return string.format("Vector(%.2f, %.2f)", v.x, v.y)
+end
+
+function Vector:magnitude()
+    return math.sqrt(self.x^2 + self.y^2)
+end
+```
+
+## PERFORMANCE OPTIMIZATION
+
+### Efficient Coding Practices
+- Cache frequently used functions in locals
+- Use table pools for temporary objects
+- Minimize string concatenation in loops
+- Use appropriate data structures for the task
+- Profile code to identify bottlenecks
+
+```lua
+-- Cache frequently used functions
+local insert = table.insert
+local concat = table.concat
+local format = string.format
+
+-- Efficient string building
+local function build_string(parts)
+    local buffer = {}
+    for i, part in ipairs(parts) do
+        buffer[i] = tostring(part)
+    end
+    return concat(buffer)
+end
+
+-- Object pooling example
+local object_pool = {}
+
+local function get_object()
+    return table.remove(object_pool) or {}
+end
+
+local function return_object(obj)
+    -- Clear the object
+    for k in pairs(obj) do
+        obj[k] = nil
+    end
+    insert(object_pool, obj)
+end
+```
+
+### Memory Management
+- Minimize table creation in hot paths
+- Use weak references for caches
+- Clean up unused references
+- Monitor memory usage patterns
+- Use appropriate garbage collection settings
+
+```lua
+-- Weak reference cache
+local cache = setmetatable({}, {__mode = "v"})
+
+local function cached_function(key)
+    local result = cache[key]
+    if not result then
+        result = expensive_computation(key)
+        cache[key] = result
+    end
+    return result
+end
+```
+
+## TESTING AND DEBUGGING
+
+### Testing Patterns
+- Write unit tests for individual functions
+- Use assertion-based testing
+- Test edge cases and error conditions
+- Mock external dependencies
+- Implement test helpers and utilities
+
+```lua
+-- Simple testing framework
+local function assert_equal(actual, expected, message)
+    if actual ~= expected then
+        error(message or string.format("Expected %s, got %s", expected, actual))
+    end
+end
+
+local function test_math_operations()
+    assert_equal(add(2, 3), 5, "Addition test failed")
+    assert_equal(multiply(4, 5), 20, "Multiplication test failed")
+    print("All math tests passed")
+end
+```
+
+### Debugging Techniques
+- Use print statements for simple debugging
+- Implement logging functions with levels
+- Use debug library for introspection
+- Create debug-friendly string representations
+- Use proper error messages with context
+
+```lua
+-- Simple logging
+local LOG_LEVELS = {DEBUG = 1, INFO = 2, WARN = 3, ERROR = 4}
+local current_level = LOG_LEVELS.INFO
+
+local function log(level, message)
+    if LOG_LEVELS[level] >= current_level then
+        print(string.format("[%s] %s", level, message))
+    end
+end
+
+-- Debug helper
+local function dump_table(tbl, indent)
+    indent = indent or 0
+    local prefix = string.rep("  ", indent)
+    
+    for k, v in pairs(tbl) do
+        if type(v) == "table" then
+            print(prefix .. k .. ":")
+            dump_table(v, indent + 1)
+        else
+            print(prefix .. k .. ": " .. tostring(v))
+        end
+    end
+end
+```
+
+## Key Conventions
+
+1. Use local variables whenever possible
+2. Implement proper error handling with pcall/xpcall
+3. Use tables as the primary data structure
+4. Follow consistent naming conventions
+5. Implement proper module patterns
+6. Use metatables for object-oriented designs
+7. Cache frequently used functions and values
+8. Write testable and modular code
+9. Document public interfaces and complex logic
+10. Profile and optimize performance-critical code
+
+Refer to Lua reference manual and community best practices for detailed language features.

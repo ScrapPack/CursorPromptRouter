@@ -1,0 +1,70 @@
+# ProjectClean Mode Template
+
+## Overview
+For full-scale project cleanup, removing unused files, scripts, and dependencies across the entire codebase. Use when performing comprehensive cleanup of orphaned assets, unused dependencies, or legacy code.
+
+## Execution Workflow
+
+### 1. Discovery (Scan for Unused Assets)
+- "I will perform a full‑scale cleanup of the codebase, removing any files or scripts not actually used."
+- **Gather file list**: use `list_dir` to enumerate all source code, scripts, assets, configs, and docs.
+- **Map references**:
+  - For each source file, run `codebase_search` to find import/require/include references.
+  - For scripts (e.g. `scripts/*.sh`, `package.json` entries), check if invoked by any build or CI config.
+  - For assets (images, styles, templates), search for usage in code or markup.
+- **Identify orphans**: mark files with zero references in codebase, CI/CD, or config.
+
+### 2. Plan Cleanup (≤4 bullets)
+1. Remove orphaned source files (not imported anywhere).  
+2. Delete unused scripts (not listed in build pipelines or `package.json`/`Makefile`).  
+3. Prune stale assets (images, CSS, templates with no usage).  
+4. Consolidate or archive large legacy directories if still partly needed.
+
+> If YOLO_MODE=off, present this plan and await approval; else proceed.
+
+### 3. Clean (Apply Removals & Refactors)
+For each orphan or candidate:
+1. **Confirm context**: `read_file` or open file to verify it's not referenced.
+2. **Remove file**: use `delete_file` to delete it from disk.
+3. **Update config**: remove related entries from `package.json`, CI YAML, or docs.
+4. **Refactor imports**: if a module was partially orphaned, adjust imports or move shared code.
+5. **Commit checkpoint** (optional): group related removals into logical commits.
+
+> Always "Read Before Delete" to avoid removing needed files.
+
+### 4. Validate (Build & Test Loop)
+- **Run build**: `<build_command>` to ensure compilation succeeds.
+- **Run tests**: `<test_command>` to verify no regressions.
+- **Lint/Type‑check**: `<lint_command>` / `<type_check>` to catch leftover references.
+- **If failures occur**:
+  - Diagnose missing file errors or broken imports.
+  - Restore or adjust removals (return to step 3).
+  - Repeat until clean.
+
+> Wrap commands in `timeout 30s … | cat` to avoid hangs.
+
+### 5. Report (Summary)
+In chat, provide:
+- Removed items: list each deleted file or script.
+- Updated configs: list modified build/CI entries.
+- Status: "Build OK, tests passing, no import errors."
+- Any recommendations (e.g. "Consider archiving legacy dir `old_utils/` instead of deleting").
+
+> Keep it concise—no full logs or diffs.
+
+### 6. Context Update (Persistence)
+- **context.json**: update with  
+  ```json
+  {
+    "last_task": "Project‑scale cleanup",
+    "summary": "Removed X unused files, Y scripts; build & tests clean.",
+    "next_steps": [ ... ]
+  }
+  ```
+
+## Key Principles
+- Safety first - always validate that files are truly unused before deletion
+- Systematic approach - methodically check every file type and reference
+- Preserve functionality - never break builds or tests during cleanup
+- Document decisions - explain reasoning for keeping or removing files
+- Incremental validation - test after each major cleanup operation 

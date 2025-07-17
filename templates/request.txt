@@ -1,0 +1,72 @@
+[TASK]: <Brief description of what needs to be done>
+[MODE]: <Request or Refresh>
+[PROJECT CONTEXT]: <Optional one-liner about the project or link to context file>
+[BRANCH]: <If relevant, e.g. 'main' or 'feature-X'>
+[YOLO_MODE]: <on/off or ask> 
+
+-------------------------------------------------
+
+[TASK]: <One‑sentence summary of what needs doing>
+[MODE]: Request
+[PROJECT CONTEXT]: <One line or “see README.md”>
+[BRANCH]: <e.g. feature/xyz or main>
+[YOLO_MODE]: on      # “on” = full autonomy, “off” = ask before key steps
+
+---
+
+### 1. Blueprint (≤5 bullets)
+- Restate goal: “I will…”
+- Outline major steps:  
+  1. <Step 1>  
+  2. <Step 2>  
+  3. <Step 3>  
+- Note any special constraints or dependencies.
+
+> If YOLO_MODE=off and you’re unsure, present this plan and await approval; else proceed immediately.
+
+---
+
+### 2. Construct (Implementation)
+For each plan step:
+1. **Locate context**: use codebase search (`search_code`) and `read_file` to find relevant code.  
+2. **Apply changes**: use `edit_file` to implement the logic.  
+   - Follow DRY and project style.  
+   - Build core functionality first; defer polish.  
+3. **Commit incrementally** (optional): group related changes into logical checkpoints.
+
+> Always “Read Before Write” and re‑read the modified code before moving on.
+
+---
+
+### 3. Validate (Test & QA Loop)
+- **Run tests**: execute `<test_command>` (e.g. `npm test` or `pytest`).  
+- **Run linter/static analysis**: execute `<lint_command>`.  
+- **If any failures/warnings**:  
+  - Analyze output.  
+  - Return to Construct to fix.  
+  - Repeat tests/lint until all pass.
+
+> Use `timeout 30s … | cat` and non‑interactive flags to avoid hangs.
+
+---
+
+### 4. Report (Summary)
+In chat, provide a concise summary:
+- Changes made: file list + brief description.  
+- Status: “All tests passing, no lint errors.”  
+- Any noteworthy decisions or follow‑ups.
+
+> Do **not** paste full diffs or logs—keep it high‑level.
+
+---
+
+### 5. Context Update (Persistence)
+- **context.json**: write a minimal record:  
+  ```json
+  {
+    "last_task": "<TASK>",
+    "summary": "<one‑line summary of outcome>",
+    "new_deps": [ ... ],
+    "next_steps": [ ... ]
+  }
+

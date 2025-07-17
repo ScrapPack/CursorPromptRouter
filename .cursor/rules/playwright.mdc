@@ -1,0 +1,232 @@
+# Playwright Testing Rules
+
+You are an expert in Playwright end-to-end testing and browser automation.
+
+## CONFIGURATION AND SETUP
+
+### Playwright Configuration
+- Use TypeScript for test files and configuration
+- Configure multiple browsers (Chromium, Firefox, WebKit)
+- Set up proper test environments
+- Configure parallel test execution
+- Implement proper timeout settings
+
+```typescript
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: 'html',
+  use: {
+    baseURL: 'http://localhost:3000',
+    trace: 'on-first-retry',
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+  ],
+});
+```
+
+## TEST STRUCTURE AND ORGANIZATION
+
+### Test File Organization
+- Group tests by feature or page
+- Use descriptive test names
+- Implement proper test isolation
+- Use setup and teardown appropriately
+- Organize tests in logical hierarchies
+
+### Page Object Model
+- Create page objects for reusable components
+- Encapsulate element selectors in page objects
+- Implement action methods in page objects
+- Use page objects for complex interactions
+- Maintain page objects separately from tests
+
+```typescript
+export class LoginPage {
+  readonly page: Page;
+  readonly emailInput: Locator;
+  readonly passwordInput: Locator;
+  readonly loginButton: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.emailInput = page.locator('[data-testid="email"]');
+    this.passwordInput = page.locator('[data-testid="password"]');
+    this.loginButton = page.locator('[data-testid="login-button"]');
+  }
+
+  async login(email: string, password: string) {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.loginButton.click();
+  }
+}
+```
+
+## ELEMENT SELECTION AND INTERACTION
+
+### Locator Strategies
+- Prefer data-testid attributes for test selectors
+- Use role-based selectors for accessibility
+- Avoid CSS selectors that depend on styling
+- Use text content selectors sparingly
+- Implement stable locator strategies
+
+### Element Interactions
+- Wait for elements to be actionable
+- Use appropriate assertion methods
+- Handle dynamic content properly
+- Implement proper error handling
+- Use soft assertions when appropriate
+
+```typescript
+test('user can login', async ({ page }) => {
+  await page.goto('/login');
+  
+  // Wait for element to be visible
+  await expect(page.locator('[data-testid="login-form"]')).toBeVisible();
+  
+  // Fill form fields
+  await page.locator('[data-testid="email"]').fill('user@example.com');
+  await page.locator('[data-testid="password"]').fill('password');
+  
+  // Submit form and wait for navigation
+  await Promise.all([
+    page.waitForURL('/dashboard'),
+    page.locator('[data-testid="login-button"]').click(),
+  ]);
+  
+  // Verify successful login
+  await expect(page.locator('[data-testid="welcome-message"]')).toBeVisible();
+});
+```
+
+## ASSERTIONS AND VALIDATIONS
+
+### Assertion Best Practices
+- Use specific assertions for better error messages
+- Implement visual regression testing
+- Test accessibility with built-in checks
+- Verify network requests and responses
+- Test error states and edge cases
+
+### Auto-waiting and Retries
+- Leverage Playwright's auto-waiting features
+- Implement custom wait conditions when needed
+- Use proper timeout configurations
+- Handle flaky tests with retries
+- Implement stable test patterns
+
+## API TESTING INTEGRATION
+
+### API Mocking and Stubbing
+- Mock external API calls during tests
+- Use route interception for API testing
+- Test error scenarios with mocked responses
+- Verify API call parameters
+- Implement request/response validation
+
+```typescript
+test('handles API error gracefully', async ({ page }) => {
+  // Mock API error response
+  await page.route('**/api/users', route => {
+    route.fulfill({
+      status: 500,
+      contentType: 'application/json',
+      body: JSON.stringify({ error: 'Internal Server Error' })
+    });
+  });
+
+  await page.goto('/users');
+  
+  // Verify error handling
+  await expect(page.locator('[data-testid="error-message"]')).toBeVisible();
+});
+```
+
+## ADVANCED TESTING PATTERNS
+
+### Authentication and Sessions
+- Implement authentication state management
+- Use storage state for logged-in users
+- Test logout and session expiration
+- Handle multiple user roles
+- Implement auth test utilities
+
+### Cross-browser Testing
+- Test on multiple browsers consistently
+- Handle browser-specific differences
+- Use device emulation for mobile testing
+- Test responsive design breakpoints
+- Verify cross-browser compatibility
+
+### Performance Testing
+- Measure page load times
+- Test Core Web Vitals
+- Monitor network requests
+- Verify resource loading
+- Implement performance budgets
+
+## DEBUGGING AND TROUBLESHOOTING
+
+### Debug Techniques
+- Use Playwright's trace viewer
+- Implement screenshot capture on failures
+- Use headed mode for debugging
+- Implement proper logging
+- Use debug mode for step-through debugging
+
+### CI/CD Integration
+- Configure tests for CI environments
+- Implement proper test parallelization
+- Handle test artifacts and reports
+- Set up test result notifications
+- Implement test retry strategies
+
+## ACCESSIBILITY TESTING
+
+### Built-in Accessibility Checks
+- Use Playwright's accessibility assertions
+- Test keyboard navigation
+- Verify screen reader compatibility
+- Check color contrast and visibility
+- Test focus management
+
+### Custom Accessibility Tests
+- Implement ARIA attribute validation
+- Test semantic HTML structure
+- Verify alternative text for images
+- Check form label associations
+- Test responsive design accessibility
+
+## Key Conventions
+
+1. Use TypeScript for all test files
+2. Implement Page Object Model for complex pages
+3. Prefer data-testid attributes for element selection
+4. Use auto-waiting features instead of manual waits
+5. Implement proper test isolation and cleanup
+6. Test on multiple browsers and devices
+7. Use meaningful test names and descriptions
+8. Implement proper error handling and debugging
+9. Integrate with CI/CD pipelines
+10. Regular test maintenance and updates
+
+Refer to Playwright documentation for the latest API features and best practices.
