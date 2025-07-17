@@ -35,6 +35,9 @@ TEMPLATES=(
     "templates-uxaudit.mdc"
     "templates-research.mdc"
     "templates-deploy.mdc"
+    "templates-question.mdc"
+    "templates-help.mdc"
+    "templates-debug.mdc"
 )
 
 # Function to print colored output

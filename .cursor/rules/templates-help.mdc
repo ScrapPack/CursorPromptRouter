@@ -1,0 +1,114 @@
+# Help and Guidance Template
+
+## Overview
+This template provides help and guidance for inexperienced users who need to understand how to use the system, what they can do, or how to get started. It's designed for users who are unsure of what to ask or how to phrase their requests.
+
+## Execution Workflow
+
+### 1. Assess User's Needs
+- **Identify the type of help needed**: New user, confused about system, unsure what to do
+- **Determine user's experience level**: Beginner, intermediate, advanced
+- **Understand their context**: What they're trying to accomplish
+
+### 2. Provide System Overview
+Explain the template router system in simple terms:
+
+```
+The Cursor Template Router helps you by automatically choosing the right workflow for your request. 
+
+Here's how it works:
+1. You tell me what you want to do
+2. I analyze your request and pick the best workflow
+3. I guide you through the process step-by-step
+
+Available workflows include:
+- 🛠️ Development (Request, Setup, Architecture)
+- 🧹 Code Quality (Clean, ProjectClean, Review)
+- 🧪 Testing (TestCoverage, SecurityAudit)
+- 📚 Documentation (Documentation, Research)
+- 🚀 Operations (Deploy, Optimize)
+```
+
+### 3. Offer Common Starting Points
+Present common scenarios and what to ask for:
+
+**For New Projects:**
+- "Set up a new React project" → Setup mode
+- "Create a project structure" → Architecture mode
+- "Initialize a development environment" → Setup mode
+
+**For Existing Code:**
+- "Add a new feature" → Request mode
+- "Fix a bug" → Refresh mode
+- "Improve performance" → Optimize mode
+
+**For Learning:**
+- "Explain how this works" → Question mode
+- "Research best practices" → Research mode
+- "Create documentation" → Documentation mode
+
+### 4. Provide Examples
+Show specific examples of good requests:
+
+```
+Good request examples:
+✅ "Add user authentication to the API"
+✅ "Set up a new React project with TypeScript"
+✅ "Fix the login bug that's causing errors"
+✅ "Create API documentation"
+✅ "Optimize database queries for better performance"
+
+Less helpful examples:
+❌ "Help me" (too vague)
+❌ "Fix everything" (too broad)
+❌ "Make it better" (unclear what needs improvement)
+```
+
+### 5. Guide to Next Action
+Help the user formulate their request:
+
+```
+What would you like to work on? Try to be specific about:
+- What you want to accomplish
+- What technology you're using
+- What problem you're trying to solve
+
+For example, instead of "help me with my code", try:
+- "Add error handling to the login function"
+- "Set up testing for the user API"
+- "Create a README for the project"
+```
+
+## Help Detection Keywords
+
+**Help Indicators:**
+- Help, I need help, I'm stuck, I don't know what to do
+- How do I, What should I, Where do I start
+- I'm new, I'm confused, I don't understand
+- Can you help, Please help, Help me
+- What can you do, What are my options
+
+**Beginner Patterns:**
+- Vague requests without specific actions
+- Questions about the system itself
+- Requests for general guidance
+- "I don't know what to ask" type statements
+
+## Integration with Mode System
+
+This template serves as an entry point:
+- **Confused users → System explanation → Example requests → Mode selection**
+- **Helps users understand how to use other templates**
+- **Prevents mode confusion by educating users first**
+- **Guides users toward more specific, actionable requests**
+
+## Error Handling
+
+- **Very vague requests**: Ask for more specific information
+- **System questions**: Explain how the router works
+- **Technology questions**: Suggest Research mode for learning
+- **Overwhelmed users**: Break down into smaller, manageable tasks
+description:
+globs:
+alwaysApply: false
+---

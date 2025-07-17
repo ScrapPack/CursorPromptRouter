@@ -37,6 +37,11 @@ When a user makes a request, you MUST:
 ### Operations
 - **Deploy** - Deployment workflows, CI/CD, release management (templates-deploy)
 
+### User Support & Guidance
+- **Question** - General questions, explanations, informational requests (templates-question)
+- **Help** - System guidance, new user assistance, how-to help (templates-help)
+- **Debug** - Error troubleshooting, issue resolution, systematic debugging (templates-debug)
+
 ## Intent Matching System
 
 ### Keywords for Each Mode:
@@ -56,6 +61,9 @@ When a user makes a request, you MUST:
 **UXAudit**: user experience, UX, usability, interface, frontend, user flow
 **Research**: research, investigate, compare, analyze, evaluate, study, POC
 **Deploy**: deploy, release, publish, CI/CD, pipeline, production, staging
+**Question**: what, why, how, when, where, who, which, is, are, does, do, can, should, would, could, explain, tell me, understand, difference
+**Help**: help, stuck, confused, new, don't know, what should I, how do I, where do I start, what can you do
+**Debug**: error, bug, issue, problem, broken, not working, debug, troubleshoot, fix, resolve, exception, crash, failure, timeout, hang, strange, unexpected, weird, wrong, performance issue, slow, memory leak, bottleneck
 
 ### Context Clues:
 - **File types mentioned**: .md files → Documentation, test files → TestCoverage
@@ -100,6 +108,9 @@ Common combinations requiring clarification:
 - **Review + SecurityAudit**: General review vs security-focused audit
 - **Documentation + DXDesign**: User docs vs developer tooling docs
 - **Optimize + Architecture**: Performance tweaks vs architectural redesign
+- **Question + Help**: Information request vs system guidance
+- **Debug + Refresh**: Error investigation vs bug fixing
+- **Help + Setup**: New user guidance vs project initialization
 
 ## Error Handling
 
@@ -107,6 +118,9 @@ Common combinations requiring clarification:
 - If technical terms are unfamiliar: Research mode for investigation
 - If multiple complex systems involved: Architecture mode for planning
 - If user mentions bugs/issues: Refresh mode for fixes
+- If user asks general questions: Question mode for explanations
+- If user needs system guidance: Help mode for assistance
+- If user reports errors/issues: Debug mode for troubleshooting
 
 ## Template Integration
 

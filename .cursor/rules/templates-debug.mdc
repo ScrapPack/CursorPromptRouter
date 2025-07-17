@@ -1,0 +1,117 @@
+# Debug and Troubleshooting Template
+
+## Overview
+This template provides systematic debugging and troubleshooting assistance for users experiencing issues, errors, or unexpected behavior. It follows a structured approach to identify and resolve problems.
+
+## Execution Workflow
+
+### 1. Gather Information
+- **Identify the problem**: What error or issue is occurring?
+- **Collect context**: What were you trying to do when it happened?
+- **Get error details**: Error messages, stack traces, console output
+- **Understand environment**: OS, language, framework, dependencies
+
+### 2. Analyze the Problem
+- **Categorize the issue**: Compilation error, runtime error, logical error, performance issue
+- **Identify root cause**: Syntax, configuration, dependency, logic, environment
+- **Assess severity**: Critical (blocks work), Important (affects functionality), Minor (cosmetic)
+
+### 3. Systematic Investigation
+Follow a structured debugging approach:
+
+**For Compilation Errors:**
+- Check syntax and grammar
+- Verify imports and dependencies
+- Review type definitions
+- Check build configuration
+
+**For Runtime Errors:**
+- Examine error messages and stack traces
+- Check variable values and state
+- Verify data types and formats
+- Review function parameters and return values
+
+**For Logical Errors:**
+- Trace program flow
+- Check conditional logic
+- Verify data transformations
+- Review algorithm implementation
+
+**For Performance Issues:**
+- Profile execution time
+- Check memory usage
+- Analyze algorithm complexity
+- Review resource utilization
+
+### 4. Propose Solutions
+Based on the analysis, suggest specific fixes:
+
+```
+Based on the error analysis, here are the likely solutions:
+
+1. **Immediate Fix**: [Specific code change or configuration update]
+2. **Root Cause Fix**: [Address the underlying issue]
+3. **Prevention**: [How to avoid this issue in the future]
+
+Would you like me to:
+1. Implement the immediate fix
+2. Explain the root cause in detail
+3. Help you set up debugging tools
+4. Create a test to reproduce the issue
+```
+
+### 5. Implement and Verify
+- **Apply the fix**: Make the necessary changes
+- **Test the solution**: Verify the issue is resolved
+- **Document the fix**: Update comments or documentation
+- **Prevent recurrence**: Add safeguards or tests
+
+## Debug Detection Keywords
+
+**Debug Indicators:**
+- Error, bug, issue, problem, broken, not working
+- Debug, troubleshoot, fix, resolve, solve
+- Exception, crash, failure, timeout, hang
+- Strange behavior, unexpected, weird, wrong
+- Performance issue, slow, memory leak, bottleneck
+
+**Error Patterns:**
+- Specific error messages or codes
+- "It's not working" type statements
+- Complaints about unexpected behavior
+- Requests to fix broken functionality
+
+## Integration with Mode System
+
+This template works with other modes:
+- **Debug → Identify issue → Apply appropriate mode**
+- **Common transitions:**
+  - Debug → Refresh (for bug fixes)
+  - Debug → Optimize (for performance issues)
+  - Debug → Review (for code quality issues)
+  - Debug → SecurityAudit (for security-related errors)
+
+## Error Handling
+
+- **Insufficient information**: Ask for more details about the error
+- **Complex issues**: Break down into smaller, manageable problems
+- **Environment-specific**: Suggest checking system requirements
+- **Third-party issues**: Guide toward dependency management or alternatives
+
+## Example Debugging Scenarios
+
+### Scenario 1: "My app is crashing on startup"
+**Investigation**: Check startup logs, dependencies, configuration
+**Solutions**: Fix dependency issues, update configuration, add error handling
+
+### Scenario 2: "The function returns wrong results"
+**Investigation**: Trace function logic, check input/output, verify algorithm
+**Solutions**: Fix logic errors, add input validation, improve algorithm
+
+### Scenario 3: "The page is loading very slowly"
+**Investigation**: Profile performance, check network requests, analyze bottlenecks
+**Solutions**: Optimize queries, implement caching, reduce bundle size
+description:
+globs:
+alwaysApply: false
+---

@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Cursor](https://img.shields.io/badge/Cursor-IDE-blue.svg)](https://cursor.sh)
-[![Template Count](https://img.shields.io/badge/Templates-15-green.svg)](https://github.com/ScrapPack/CursorUpgrade)
+[![Template Count](https://img.shields.io/badge/Templates-18-green.svg)](https://github.com/ScrapPack/CursorUpgrade)
 
 ## 🎯 The Problem
 
@@ -19,7 +19,7 @@ The **Cursor Template Router** is an intelligent system that analyzes your reque
 ### 🎯 What It Does
 
 - **🔍 Intelligent Analysis**: Analyzes your request using keyword matching and context clues
-- **🎯 Smart Routing**: Routes to 1 of 15 specialized workflow templates
+- **🎯 Smart Routing**: Routes to 1 of 18 specialized workflow templates
 - **🤔 Clarification**: Asks for clarification when multiple approaches could work
 - **⚡ Consistent Results**: Same request type = same workflow = consistent results
 - **🛠️ Native Integration**: Uses Cursor's official `.cursor/rules` system
@@ -49,6 +49,9 @@ User Request → Keyword Analysis → Intent Matching → Template Selection →
 | **🎨 User Experience** | UXAudit | UX review | "Audit user flow" |
 | **🔬 Research** | Research | Technology research | "Research GraphQL vs REST" |
 | **🚀 Operations** | Deploy | Deployment | "Deploy to production" |
+| **❓ User Support** | Question | General questions & explanations | "What is dependency injection?" |
+| **🆘 Help** | Help | System guidance & new user assistance | "Help me get started" |
+| **🐛 Debug** | Debug | Error troubleshooting & issue resolution | "My app is crashing" |
 
 ## 🚀 Quick Start
 
@@ -206,6 +209,25 @@ You can also explicitly specify the mode:
 "[MODE: SecurityAudit] Check the codebase"
 "[MODE: Research] Compare React vs Vue"
 "[MODE: UXAudit] Review the checkout flow"
+
+### User Support Modes
+
+For inexperienced users or when you need guidance:
+
+**Question Mode**: Ask general questions and get explanations
+- "What is dependency injection?"
+- "Why do we need unit tests?"
+- "How does authentication work?"
+
+**Help Mode**: Get system guidance and examples
+- "Help me get started"
+- "I don't know what to ask"
+- "What can this system do?"
+
+**Debug Mode**: Systematic troubleshooting for issues
+- "My app is crashing"
+- "The function returns wrong results"
+- "The page is loading slowly"
 ```
 
 ## 🚨 Common Pain Points & Solutions
@@ -327,7 +349,7 @@ cat > test-templates.sh << 'EOF'
 #!/bin/bash
 echo "Testing Cursor Template System..."
 
-for template in request setup architecture optimize refresh clean projectclean testcoverage review securityaudit documentation dxdesign uxaudit research deploy; do
+for template in request setup architecture optimize refresh clean projectclean testcoverage review securityaudit documentation dxdesign uxaudit research deploy question help debug; do
     if [ -f ".cursor/rules/templates-${template}.mdc" ]; then
         echo "✅ templates-${template}.mdc"
     else
@@ -352,6 +374,9 @@ Try these test requests:
 "Add authentication" → Request mode
 "Create documentation" → Documentation mode
 "Set up project" → Setup mode
+"What is dependency injection?" → Question mode
+"Help me get started" → Help mode
+"My app is crashing" → Debug mode
 
 # Should trigger clarification
 "Improve the app" → Multiple modes

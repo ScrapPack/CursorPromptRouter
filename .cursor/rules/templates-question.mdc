@@ -1,0 +1,97 @@
+# Question Handler Template
+
+## Overview
+This template handles general questions, explanations, and informational requests that don't map directly to actionable workflows. It provides clear answers and then guides users toward productive next steps using the mode system.
+
+## Execution Workflow
+
+### 1. Analyze and Answer
+- **Understand the question**: Identify what the user is asking about
+- **Provide a direct, helpful answer**: Give a clear, concise response
+- **Add context if needed**: Include relevant background information
+- **Use examples when helpful**: Illustrate concepts with practical examples
+
+### 2. Identify Potential Next Steps
+Based on the question context, identify 2-4 relevant next steps that could help the user:
+
+**Common Next Steps by Question Type:**
+- **"What is X?"** → Documentation mode (create docs), Research mode (learn more)
+- **"Why do we need Y?"** → Documentation mode (explain purpose), Architecture mode (design context)
+- **"How does Z work?"** → Documentation mode (create guide), DXDesign mode (improve usability)
+- **"Is this correct?"** → Review mode (code review), SecurityAudit mode (security check)
+- **"Should I do X?"** → Research mode (investigate), Architecture mode (planning)
+
+### 3. Present Next Steps
+Offer the user actionable options using the mode system:
+
+```
+Based on your question, here are some helpful next steps you might want to consider:
+
+1. **[Mode1]** - [Brief description of what this would accomplish]
+2. **[Mode2]** - [Brief description of what this would accomplish]  
+3. **[Mode3]** - [Brief description of what this would accomplish]
+4. **No further action needed** - You're all set!
+
+Which option interests you? (Just reply with the number)
+```
+
+### 4. Execute Selected Action
+- If user selects a mode: Switch to that template workflow
+- If user selects "No further action": Confirm and end
+- If user asks follow-up questions: Return to step 1
+
+## Question Detection Keywords
+
+**Question Indicators:**
+- What, Why, How, When, Where, Who, Which
+- Is, Are, Does, Do, Can, Should, Would, Could
+- Explain, Tell me, I don't understand, Help me understand
+- What's the difference, How do I, Why should I
+
+**Non-Actionable Patterns:**
+- Questions without clear action verbs
+- Explanatory requests
+- Understanding/learning requests
+- Comparison questions
+
+## Example Workflows
+
+### Example 1: "What is dependency injection?"
+**Answer**: Explain DI concept and benefits
+**Next Steps**: 
+1. Documentation mode - Create a guide about DI patterns
+2. Architecture mode - Design DI implementation
+3. Research mode - Compare DI frameworks
+
+### Example 2: "Why do we need unit tests?"
+**Answer**: Explain testing benefits and importance
+**Next Steps**:
+1. TestCoverage mode - Add tests to the project
+2. Documentation mode - Create testing guidelines
+3. DXDesign mode - Set up testing tools
+
+### Example 3: "Is this code secure?"
+**Answer**: Provide security assessment
+**Next Steps**:
+1. SecurityAudit mode - Run security scan
+2. Review mode - Code review for security
+3. Documentation mode - Create security guidelines
+
+## Integration with Mode System
+
+This template serves as a bridge between questions and actions:
+- **Questions → Answers → Suggested Actions → Mode Execution**
+- **Maintains the mode system's workflow structure**
+- **Guides inexperienced users toward productive next steps**
+- **Prevents mode confusion by providing clear context**
+
+## Error Handling
+
+- **Unclear questions**: Ask for clarification
+- **Technical questions**: Suggest Research mode for investigation
+- **Opinion questions**: Provide balanced perspective and suggest relevant modes
+- **Broad questions**: Break down into specific areas and suggest appropriate modes
+description:
+globs:
+alwaysApply: false
+---
