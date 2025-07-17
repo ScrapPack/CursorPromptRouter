@@ -51,14 +51,12 @@ In chat, provide:
 > Keep it concise—no full logs or diffs.
 
 ### 5. Context Update (Persistence)  
-- **context.json:** update with  
-  ```json
-  {
-    "last_task": "<TASK>",
-    "summary": "Removed unused code in X modules; cleaned up files in legacy/; tests & lint clean.",
-    "next_steps": [ ... ]
-  }
-  ```
+- **cursorContext.json**: Update with concise implementation summary:
+  - Read current context from `cursorContext.json`
+  - Add cleanup summary to `context_history.recent_activities` (max 10 entries)
+  - Update `usage_stats.mode_usage.clean` counter
+  - Write back with constraints (max 100 chars per summary, 5KB total)
+  - Follow context analysis rule for size management
 
 ## Key Principles
 - Safety first - always run tests after cleanup

@@ -134,24 +134,26 @@ All templates are available as cursor rules in `.cursor/rules/templates-<mode>.m
 
 ## Context File Management
 
-The system maintains a `cursorContext.json` file to track implementation summaries and usage statistics:
+The system maintains a `cursorContext.json` file to track implementation summaries and usage statistics. See `context-analysis.mdc` for detailed constraints and management rules.
 
 ### Context File Structure
 - **System Info**: Version, creation date, last update
-- **Template Summaries**: Single-line implementation summaries for each template
-- **Usage Stats**: Request counts and mode usage tracking
-- **Context History**: Recent activities and last task information
+- **Template Summaries**: Single-line implementation summaries for each template (≤100 chars)
+- **Usage Stats**: Request counts and mode usage tracking (max 50 requests)
+- **Context History**: Recent activities and last task information (max 10 entries)
 
 ### Context File Operations
 - **First Use**: Create `cursorContext.json` if it doesn't exist
 - **Mode Selection**: Update usage statistics when a mode is selected
 - **Task Completion**: Store implementation summaries and context updates
 - **History Tracking**: Maintain recent activity log for continuity
+- **Size Management**: Enforce 5KB limit and prune old data
 
 ### Context File Access
 - **Read**: Access template summaries and usage patterns
 - **Write**: Update statistics and store implementation results
 - **Backup**: Preserve context history for future reference
+- **Constraints**: Follow context analysis rule for size limits
 
 ## Template Integration
 

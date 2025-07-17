@@ -13,11 +13,11 @@
     },
     "request": {
       "name": "Request Mode",
-      "summary": "Implements new features and functionality using structured 5-step workflow with blueprint, construct, validate, report, and context update phases"
+      "summary": "Implements new features using structured 5-step workflow: blueprint, construct, validate, report, context update"
     },
     "setup": {
       "name": "Setup Mode", 
-      "summary": "Bootstraps new projects with environment initialization, dependency installation, and development tool configuration"
+      "summary": "Bootstraps new projects with environment setup, dependency installation, and dev tool configuration"
     },
     "architecture": {
       "name": "Architecture Mode",
@@ -25,11 +25,11 @@
     },
     "clean": {
       "name": "Clean Mode",
-      "summary": "Removes dead code, refactors modules, and improves code quality through targeted cleanup operations"
+      "summary": "Removes dead code, refactors modules, and improves code quality through targeted cleanup"
     },
     "deploy": {
       "name": "Deploy Mode",
-      "summary": "Manages deployment workflows, CI/CD pipelines, and release processes for production environments"
+      "summary": "Manages deployment workflows, CI/CD pipelines, and release processes for production"
     },
     "documentation": {
       "name": "Documentation Mode",
@@ -37,19 +37,19 @@
     },
     "debug": {
       "name": "Debug Mode",
-      "summary": "Systematically troubleshoots errors and issues using structured investigation and solution implementation"
+      "summary": "Systematically troubleshoots errors using structured investigation and solution implementation"
     },
     "dxdesign": {
       "name": "DXDesign Mode",
-      "summary": "Improves developer experience through better tooling, CLI interfaces, and development workflow enhancements"
+      "summary": "Improves developer experience through better tooling, CLI interfaces, and workflow enhancements"
     },
     "help": {
       "name": "Help Mode",
-      "summary": "Provides system guidance and assistance for new users or those needing direction on available capabilities"
+      "summary": "Provides system guidance and assistance for new users or those needing direction"
     },
     "optimize": {
       "name": "Optimize Mode",
-      "summary": "Improves performance and efficiency through code optimization, algorithm improvements, and resource management"
+      "summary": "Improves performance through code optimization, algorithm improvements, and resource management"
     },
     "projectclean": {
       "name": "ProjectClean Mode",
@@ -61,7 +61,7 @@
     },
     "refresh": {
       "name": "Refresh Mode",
-      "summary": "Fixes bugs, resolves issues, and performs maintenance tasks using systematic problem-solving approach"
+      "summary": "Fixes bugs, resolves issues, and performs maintenance tasks using systematic problem-solving"
     },
     "research": {
       "name": "Research Mode",
@@ -69,7 +69,7 @@
     },
     "review": {
       "name": "Review Mode",
-      "summary": "Performs code reviews, PR analysis, and quality assessments with structured evaluation criteria"
+      "summary": "Performs code reviews, PR analysis, and quality assessments with structured evaluation"
     },
     "securityaudit": {
       "name": "SecurityAudit Mode",

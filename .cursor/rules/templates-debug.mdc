@@ -71,6 +71,7 @@ Would you like me to:
 - **Test the solution**: Verify the issue is resolved
 - **Document the fix**: Update comments or documentation
 - **Prevent recurrence**: Add safeguards or tests
+- **Update Context**: Add debug summary to `cursorContext.json` with constraints
 
 ## Debug Detection Keywords
 

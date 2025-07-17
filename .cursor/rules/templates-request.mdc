@@ -52,15 +52,12 @@ In chat, provide a concise summary:
 > Do **not** paste full diffs or logs—keep it high‑level.
 
 ### 5. Context Update (Persistence)
-- **context.json**: write a minimal record:  
-  ```json
-  {
-    "last_task": "<TASK>",
-    "summary": "<one‑line summary of outcome>",
-    "new_deps": [ ... ],
-    "next_steps": [ ... ]
-  }
-  ```
+- **cursorContext.json**: Update with concise implementation summary:
+  - Read current context from `cursorContext.json`
+  - Add task summary to `context_history.recent_activities` (max 10 entries)
+  - Update `usage_stats.mode_usage.request` counter
+  - Write back with constraints (max 100 chars per summary, 5KB total)
+  - Follow context analysis rule for size management
 
 ## Key Principles
 - Read before write - always understand existing code first

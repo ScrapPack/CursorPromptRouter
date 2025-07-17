@@ -55,15 +55,12 @@ In chat, provide:
 - Next steps: initial features to implement or configurations to adjust.
 
 ### 8. Context Update (Persistence)
-- **context.json**: update with  
-  ```json
-  {
-    "last_task": "<TASK>",
-    "summary": "Bootstrapped <project_type> with <tech_stack>; setup complete.",
-    "tech_stack": ["<framework>", "<language>", "<tools>"],
-    "next_steps": ["Implement core features", "Setup CI/CD", "Add documentation"]
-  }
-  ```
+- **cursorContext.json**: Update with concise implementation summary:
+  - Read current context from `cursorContext.json`
+  - Add setup summary to `context_history.recent_activities` (max 10 entries)
+  - Update `usage_stats.mode_usage.setup` counter
+  - Write back with constraints (max 100 chars per summary, 5KB total)
+  - Follow context analysis rule for size management
 
 ## Key Principles
 - Follow conventions - use established patterns for the technology stack

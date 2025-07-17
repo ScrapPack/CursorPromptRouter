@@ -1,0 +1,137 @@
+---
+name: "Context Analysis Rule"
+agentRequested: true
+description: "Analyzes and manages cursorContext.json with constraints to limit context length and prevent bloat"
+---
+
+# Context Analysis and Management Rule
+
+## Purpose
+This rule analyzes the `cursorContext.json` file to ensure efficient context management and prevent excessive context bloat that could impact Cursor performance.
+
+## Context Constraints
+
+### Size Limits
+- **Template Summary**: Maximum 100 characters per template summary
+- **Context History**: Maximum 10 recent activities
+- **Usage Stats**: Keep only last 50 requests
+- **Total File Size**: Maximum 5KB for optimal performance
+
+### Content Guidelines
+- **Concise Summaries**: Use action-oriented, single-line descriptions
+- **Relevant Keywords**: Include key workflow terms for better matching
+- **No Redundancy**: Avoid repeating information across templates
+- **Structured Format**: Maintain consistent JSON structure
+
+## Context Analysis Workflow
+
+### 1. Read Context File
+- Check if `cursorContext.json` exists
+- Validate JSON structure and required fields
+- Parse template summaries and usage statistics
+
+### 2. Apply Constraints
+- **Truncate Long Summaries**: Limit to 100 characters
+- **Prune History**: Keep only last 10 activities
+- **Clean Stats**: Remove outdated usage data
+- **Validate Size**: Ensure file stays under 5KB
+
+### 3. Update Context
+- **Template Summaries**: Use concise, action-oriented descriptions
+- **Usage Tracking**: Increment counters for selected modes
+- **History Log**: Add current activity with timestamp
+- **Last Update**: Update system metadata
+
+### 4. Write Back
+- **Format JSON**: Ensure proper indentation and structure
+- **Validate**: Check JSON syntax before writing
+- **Backup**: Create backup before major changes
+- **Commit**: Track changes in version control
+
+## Template Integration
+
+### Context Retrieval
+When a template is selected:
+1. **Read Summary**: Get template summary from `cursorContext.json`
+2. **Check Usage**: Review usage statistics for context
+3. **Update Counters**: Increment mode usage count
+4. **Log Activity**: Add to recent activities list
+
+### Context Updates
+After template execution:
+1. **Extract Summary**: Create concise implementation summary
+2. **Update History**: Add to context history with timestamp
+3. **Prune Old Data**: Remove outdated entries
+4. **Write Changes**: Save updated context file
+
+## Context File Structure
+
+```json
+{
+  "system_info": {
+    "name": "Cursor Template Router System",
+    "version": "1.0.0",
+    "last_updated": "2025-01-17"
+  },
+  "templates": {
+    "template_name": {
+      "name": "Template Display Name",
+      "summary": "Concise action-oriented description (≤100 chars)"
+    }
+  },
+  "usage_stats": {
+    "total_requests": 0,
+    "mode_usage": {},
+    "last_used": null
+  },
+  "context_history": {
+    "last_task": null,
+    "last_summary": null,
+    "recent_activities": []
+  }
+}
+```
+
+## Performance Guidelines
+
+### Context Length Management
+- **Template Summaries**: Keep under 100 characters
+- **Activity Logs**: Maximum 10 entries
+- **Usage Data**: Prune after 50 requests
+- **File Size**: Monitor and maintain under 5KB
+
+### Optimization Strategies
+- **Lazy Loading**: Only read context when needed
+- **Incremental Updates**: Update only changed sections
+- **Caching**: Cache frequently accessed data
+- **Cleanup**: Regular pruning of old data
+
+## Error Handling
+
+### Context File Issues
+- **Missing File**: Create default structure
+- **Invalid JSON**: Restore from backup or recreate
+- **Size Exceeded**: Prune oldest entries
+- **Permission Errors**: Log error and continue without context
+
+### Fallback Behavior
+- **No Context**: Use default template descriptions
+- **Corrupted File**: Recreate with minimal structure
+- **Read Errors**: Continue with basic functionality
+- **Write Errors**: Log error and preserve existing data
+
+## Integration with Templates
+
+### Template Context Usage
+Templates should:
+1. **Read Context**: Get summary from `cursorContext.json`
+2. **Use Summary**: Display concise template description
+3. **Update Stats**: Increment usage counters
+4. **Log Activity**: Record template execution
+
+### Context-Aware Workflows
+- **Smart Routing**: Use usage patterns for better mode selection
+- **History Awareness**: Consider recent activities for context
+- **Performance Optimization**: Limit context size for speed
+- **User Experience**: Provide relevant, concise information
+
