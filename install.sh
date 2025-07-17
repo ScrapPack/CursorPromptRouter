@@ -13,8 +13,8 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-REPO_URL="https://github.com/your-username/cursor-template-router"
-RAW_URL="https://raw.githubusercontent.com/your-username/cursor-template-router/main"
+REPO_URL="https://github.com/ScrapPack/CursorUpgrade"
+RAW_URL="https://raw.githubusercontent.com/ScrapPack/CursorUpgrade/main"
 CURSOR_RULES_DIR=".cursor/rules"
 
 # Template files to install

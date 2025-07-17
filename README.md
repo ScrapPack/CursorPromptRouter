@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Cursor](https://img.shields.io/badge/Cursor-IDE-blue.svg)](https://cursor.sh)
-[![Template Count](https://img.shields.io/badge/Templates-15-green.svg)](https://github.com/your-username/cursor-template-router)
+[![Template Count](https://img.shields.io/badge/Templates-15-green.svg)](https://github.com/ScrapPack/CursorUpgrade)
 
 ## 🎯 The Problem
 
@@ -56,13 +56,13 @@ User Request → Keyword Analysis → Intent Matching → Template Selection →
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/cursor-template-router.git
+git clone https://github.com/ScrapPack/CursorUpgrade.git
 
 # Copy templates to your project
-cp -r cursor-template-router/.cursor/rules .cursor/
+cp -r CursorUpgrade/.cursor/rules .cursor/
 
 # Or use the automated installer
-curl -sSL https://raw.githubusercontent.com/your-username/cursor-template-router/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/ScrapPack/CursorUpgrade/main/install.sh | bash
 ```
 
 ### 2. Restart Cursor
@@ -150,7 +150,7 @@ cp /path/to/templates/templates-*.mdc .cursor/rules/
 
 ```bash
 # Download and run installer
-curl -sSL https://raw.githubusercontent.com/your-username/cursor-template-router/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/ScrapPack/CursorUpgrade/main/install.sh | bash
 ```
 
 ### Method 3: Global Installation
@@ -365,8 +365,8 @@ We welcome contributions! Here's how to get started:
 ### 1. Fork the Repository
 
 ```bash
-git clone https://github.com/your-username/cursor-template-router.git
-cd cursor-template-router
+git clone https://github.com/ScrapPack/CursorUpgrade.git
+cd CursorUpgrade
 ```
 
 ### 2. Create a Feature Branch
