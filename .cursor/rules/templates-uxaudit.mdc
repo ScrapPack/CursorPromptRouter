@@ -1,4 +1,5 @@
 ---
+name: "UXAudit Mode Template"
 agentRequested: true
 description: "User experience review, usability improvements workflow template"
 ---

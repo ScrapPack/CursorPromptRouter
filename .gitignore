@@ -81,5 +81,4 @@ out/
 
 # Context and session files
 context.json
-*.context.json
 session.json 

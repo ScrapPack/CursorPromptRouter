@@ -1,4 +1,5 @@
 ---
+name: "Help Mode Template"
 agentRequested: true
 description: "System guidance, new user assistance, how-to help workflow template"
 ---

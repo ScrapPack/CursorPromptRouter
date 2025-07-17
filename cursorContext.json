@@ -1,0 +1,97 @@
+{
+  "system_info": {
+    "name": "Cursor Template Router System",
+    "version": "1.0.0",
+    "description": "Intelligent workflow routing system for Cursor AI",
+    "created": "2025-01-17",
+    "last_updated": "2025-01-17"
+  },
+  "templates": {
+    "router": {
+      "name": "Template Router",
+      "summary": "Analyzes user requests using keyword matching and routes to appropriate workflow templates"
+    },
+    "request": {
+      "name": "Request Mode",
+      "summary": "Implements new features and functionality using structured 5-step workflow with blueprint, construct, validate, report, and context update phases"
+    },
+    "setup": {
+      "name": "Setup Mode", 
+      "summary": "Bootstraps new projects with environment initialization, dependency installation, and development tool configuration"
+    },
+    "architecture": {
+      "name": "Architecture Mode",
+      "summary": "Designs system architecture with component breakdown, technology choices, and trade-off analysis"
+    },
+    "clean": {
+      "name": "Clean Mode",
+      "summary": "Removes dead code, refactors modules, and improves code quality through targeted cleanup operations"
+    },
+    "deploy": {
+      "name": "Deploy Mode",
+      "summary": "Manages deployment workflows, CI/CD pipelines, and release processes for production environments"
+    },
+    "documentation": {
+      "name": "Documentation Mode",
+      "summary": "Creates and updates documentation including README files, API docs, and user guides"
+    },
+    "debug": {
+      "name": "Debug Mode",
+      "summary": "Systematically troubleshoots errors and issues using structured investigation and solution implementation"
+    },
+    "dxdesign": {
+      "name": "DXDesign Mode",
+      "summary": "Improves developer experience through better tooling, CLI interfaces, and development workflow enhancements"
+    },
+    "help": {
+      "name": "Help Mode",
+      "summary": "Provides system guidance and assistance for new users or those needing direction on available capabilities"
+    },
+    "optimize": {
+      "name": "Optimize Mode",
+      "summary": "Improves performance and efficiency through code optimization, algorithm improvements, and resource management"
+    },
+    "projectclean": {
+      "name": "ProjectClean Mode",
+      "summary": "Performs comprehensive project cleanup across entire codebase including unused files and dependencies"
+    },
+    "question": {
+      "name": "Question Mode",
+      "summary": "Answers general questions and provides explanations before guiding users toward actionable next steps"
+    },
+    "refresh": {
+      "name": "Refresh Mode",
+      "summary": "Fixes bugs, resolves issues, and performs maintenance tasks using systematic problem-solving approach"
+    },
+    "research": {
+      "name": "Research Mode",
+      "summary": "Conducts technology research, proof of concepts, and comparative analysis of tools and approaches"
+    },
+    "review": {
+      "name": "Review Mode",
+      "summary": "Performs code reviews, PR analysis, and quality assessments with structured evaluation criteria"
+    },
+    "securityaudit": {
+      "name": "SecurityAudit Mode",
+      "summary": "Conducts security assessments, vulnerability scanning, and security best practices evaluation"
+    },
+    "testcoverage": {
+      "name": "TestCoverage Mode",
+      "summary": "Improves test coverage by adding missing tests, enhancing test suites, and ensuring comprehensive testing"
+    },
+    "uxaudit": {
+      "name": "UXAudit Mode",
+      "summary": "Reviews user experience, improves usability, and optimizes frontend interfaces and user flows"
+    }
+  },
+  "usage_stats": {
+    "total_requests": 0,
+    "mode_usage": {},
+    "last_used": null
+  },
+  "context_history": {
+    "last_task": null,
+    "last_summary": null,
+    "recent_activities": []
+  }
+} 

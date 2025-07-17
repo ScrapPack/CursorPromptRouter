@@ -1,4 +1,5 @@
 ---
+name: "Request Mode Template"
 agentRequested: true
 description: "General task implementation and feature development workflow template"
 ---

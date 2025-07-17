@@ -1,4 +1,5 @@
 ---
+name: "Documentation Mode Template"
 agentRequested: true
 description: "Creating/updating docs, API documentation workflow template"
 ---

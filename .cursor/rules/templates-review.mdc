@@ -1,4 +1,5 @@
 ---
+name: "Review Mode Template"
 agentRequested: true
 description: "Code review, PR analysis, quality assessment workflow template"
 ---

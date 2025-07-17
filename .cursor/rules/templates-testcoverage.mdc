@@ -1,4 +1,5 @@
 ---
+name: "TestCoverage Mode Template"
 agentRequested: true
 description: "Adding tests, improving test coverage workflow template"
 ---

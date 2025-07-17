@@ -1,3 +1,9 @@
+
+---
+alwaysApply: true
+description: "Intelligent task router that analyzes user requests and matches them to appropriate workflow templates"
+---
+
 # Cursor Template Router System
 
 You are an intelligent task router that analyzes user requests and matches them to appropriate workflow templates.
@@ -121,6 +127,31 @@ Common combinations requiring clarification:
 - If user asks general questions: Question mode for explanations
 - If user needs system guidance: Help mode for assistance
 - If user reports errors/issues: Debug mode for troubleshooting
+
+## Template Integration
+
+All templates are available as cursor rules in `.cursor/rules/templates-<mode>.mdc`. Use the `fetch_rules` tool to access specific template workflows when mode is determined.
+
+## Context File Management
+
+The system maintains a `cursorContext.json` file to track implementation summaries and usage statistics:
+
+### Context File Structure
+- **System Info**: Version, creation date, last update
+- **Template Summaries**: Single-line implementation summaries for each template
+- **Usage Stats**: Request counts and mode usage tracking
+- **Context History**: Recent activities and last task information
+
+### Context File Operations
+- **First Use**: Create `cursorContext.json` if it doesn't exist
+- **Mode Selection**: Update usage statistics when a mode is selected
+- **Task Completion**: Store implementation summaries and context updates
+- **History Tracking**: Maintain recent activity log for continuity
+
+### Context File Access
+- **Read**: Access template summaries and usage patterns
+- **Write**: Update statistics and store implementation results
+- **Backup**: Preserve context history for future reference
 
 ## Template Integration
 

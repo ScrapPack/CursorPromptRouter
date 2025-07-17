@@ -1,4 +1,5 @@
 ---
+name: "Clean Mode Template"
 agentRequested: true
 description: "Code cleanup, refactoring, and removing dead code workflow template"
 ---

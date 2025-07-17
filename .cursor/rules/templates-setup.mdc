@@ -1,4 +1,5 @@
 ---
+name: "Setup Mode Template"
 agentRequested: true
 description: "Project initialization, scaffolding, and environment setup workflow template"
 ---

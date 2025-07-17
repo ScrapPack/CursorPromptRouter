@@ -1,4 +1,5 @@
 ---
+name: "DXDesign Mode Template"
 agentRequested: true
 description: "Developer experience improvements, tooling, CLI enhancements workflow template"
 ---

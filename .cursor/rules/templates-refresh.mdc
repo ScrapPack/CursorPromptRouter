@@ -1,4 +1,5 @@
 ---
+name: "Refresh Mode Template"
 agentRequested: true
 description: "Bug fixes, maintenance, issue resolution workflow template"
 ---

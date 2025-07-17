@@ -1,4 +1,5 @@
 ---
+name: "Debug Mode Template"
 agentRequested: true
 description: "Error troubleshooting, issue resolution, systematic debugging workflow template"
 ---
