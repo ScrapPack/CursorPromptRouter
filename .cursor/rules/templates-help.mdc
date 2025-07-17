@@ -1,3 +1,8 @@
+---
+agentRequested: true
+description: "System guidance, new user assistance, how-to help workflow template"
+---
+
 # Help and Guidance Template
 
 ## Overview
@@ -108,7 +113,3 @@ This template serves as an entry point:
 - **System questions**: Explain how the router works
 - **Technology questions**: Suggest Research mode for learning
 - **Overwhelmed users**: Break down into smaller, manageable tasks
-description:
-globs:
-alwaysApply: false
----

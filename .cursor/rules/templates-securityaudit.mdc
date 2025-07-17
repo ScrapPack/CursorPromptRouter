@@ -1,3 +1,8 @@
+---
+agentRequested: true
+description: "Security scanning, vulnerability assessment workflow template"
+---
+
 # SecurityAudit Mode Template
 
 ## Overview

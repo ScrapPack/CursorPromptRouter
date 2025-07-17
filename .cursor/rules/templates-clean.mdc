@@ -1,3 +1,8 @@
+---
+agentRequested: true
+description: "Code cleanup, refactoring, and removing dead code workflow template"
+---
+
 # Clean Mode Template
 
 ## Overview
@@ -57,6 +62,9 @@ In chat, provide:
 ## Key Principles
 - Safety first - always run tests after cleanup
 - Incremental approach - clean one area at a time
+- Preserve functionality - never alter behavior during cleanup
+- Document reasoning - explain why code was removed
+- Follow linting rules - use automated tools to guide cleanup 
 - Preserve functionality - never alter behavior during cleanup
 - Document reasoning - explain why code was removed
 - Follow linting rules - use automated tools to guide cleanup 

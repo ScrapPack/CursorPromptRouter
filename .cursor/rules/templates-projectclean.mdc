@@ -1,3 +1,8 @@
+---
+agentRequested: true
+description: "Full project cleanup, removing unused files/dependencies workflow template"
+---
+
 # ProjectClean Mode Template
 
 ## Overview

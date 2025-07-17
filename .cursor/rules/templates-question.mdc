@@ -1,3 +1,8 @@
+---
+agentRequested: true
+description: "General questions, explanations, informational requests workflow template"
+---
+
 # Question Handler Template
 
 ## Overview
@@ -91,7 +96,3 @@ This template serves as a bridge between questions and actions:
 - **Technical questions**: Suggest Research mode for investigation
 - **Opinion questions**: Provide balanced perspective and suggest relevant modes
 - **Broad questions**: Break down into specific areas and suggest appropriate modes
-description:
-globs:
-alwaysApply: false
----

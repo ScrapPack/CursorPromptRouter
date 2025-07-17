@@ -1,3 +1,8 @@
+---
+agentRequested: true
+description: "System design, component planning, and tech stack decisions workflow template"
+---
+
 # Architecture Mode Template
 
 ## Overview
@@ -43,6 +48,9 @@ For system design, component planning, and high-level architectural decisions. U
 ## Key Principles
 - Think holistically - consider all system aspects
 - Document decisions - justify technology and pattern choices
+- Plan for scale - consider future growth and evolution
+- Balance trade-offs - evaluate cost vs. benefit for each decision
+- Validate assumptions - test critical paths and integrations 
 - Plan for scale - consider future growth and evolution
 - Balance trade-offs - evaluate cost vs. benefit for each decision
 - Validate assumptions - test critical paths and integrations 

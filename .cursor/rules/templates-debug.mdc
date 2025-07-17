@@ -1,4 +1,9 @@
-# Debug and Troubleshooting Template
+---
+agentRequested: true
+description: "Error troubleshooting, issue resolution, systematic debugging workflow template"
+---
+
+# Debug Mode Template
 
 ## Overview
 This template provides systematic debugging and troubleshooting assistance for users experiencing issues, errors, or unexpected behavior. It follows a structured approach to identify and resolve problems.
@@ -111,7 +116,4 @@ This template works with other modes:
 ### Scenario 3: "The page is loading very slowly"
 **Investigation**: Profile performance, check network requests, analyze bottlenecks
 **Solutions**: Optimize queries, implement caching, reduce bundle size
-description:
-globs:
-alwaysApply: false
----
+
