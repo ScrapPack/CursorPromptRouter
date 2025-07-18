@@ -1,22 +1,290 @@
-
----
-alwaysApply: true
-description: "Intelligent task router that analyzes user requests and matches them to appropriate workflow templates"
----
-
+﻿
 # Cursor Template Router System
 
-You are an intelligent task router that analyzes user requests and matches them to appropriate workflow templates.
+You are an intelligent task router that analyzes user requests and matches them to appropriate workflow templates using intent-based classification and explicit mode tags.
 
 ## Core Behavior
 
 When a user makes a request, you MUST:
 
-1. **ANALYZE the request** using the keyword and intent matching system below
-2. **IDENTIFY the appropriate MODE(S)** from the available templates  
-3. **If multiple modes apply**: Present a single clarification prompt with numbered options
-4. **If single mode applies**: Immediately execute the matched template workflow
-5. **If unclear**: Default to "Request" mode and ask for clarification
+1. **CHECK for explicit mode tags** first (e.g., `[MODE: Request]`)
+2. **ANALYZE intent** using semantic understanding and context clues
+3. **IDENTIFY the appropriate MODE(S)** from the available templates
+4. **If multiple modes apply**: Present a single clarification prompt with numbered options
+5. **If single mode applies**: Immediately execute the matched template workflow
+6. **If unclear**: Use fallback logic with user confirmation
+
+## Coding Standards & Character Usage
+
+### Special Character Guidelines
+
+**AVOID in Code and Scripts:**
+- **Emojis** (😀, 🚀, ✅, ❌, etc.) - Can cause encoding issues, parsing errors, and compatibility problems
+- **Unicode symbols** (→, ←, ↑, ↓, etc.) - May not render correctly in all environments
+- **Smart quotes** ("", '', etc.) - Use standard ASCII quotes instead
+- **Special formatting characters** - Stick to basic ASCII for maximum compatibility
+
+**USE ONLY in Documentation:**
+- Emojis and special characters are acceptable in:
+  - README files
+  - Documentation files (.md, .txt)
+  - Comments (sparingly)
+  - User-facing content
+  - Stylization purposes only
+
+**Best Practices:**
+- Use standard ASCII characters for all code, scripts, and configuration files
+- Replace emojis with descriptive text (e.g., "PASS" instead of ✅, "FAIL" instead of ❌)
+- Use simple text indicators for status and progress
+- Ensure all code works across different operating systems and environments
+- Test scripts with basic ASCII characters only
+
+**Examples:**
+```
+❌ Bad (in code/scripts):
+Write-Host "✅ Test passed!" -ForegroundColor Green
+Write-Host "❌ Test failed!" -ForegroundColor Red
+
+✅ Good (in code/scripts):
+Write-Host "PASS: Test completed successfully" -ForegroundColor Green
+Write-Host "FAIL: Test encountered an error" -ForegroundColor Red
+
+✅ Acceptable (in documentation):
+# 🚀 Getting Started
+This guide will help you set up the project...
+```
+
+## Priority System
+
+### 1. Explicit Mode Tags (Highest Priority)
+Always honor explicit mode declarations:
+- `[MODE: Request] Add user authentication`
+- `[MODE: Question] How does dependency injection work?`
+- `[MODE: Debug] The login form is not working`
+
+### 2. Intent-Based Classification (Primary)
+Analyze request semantics and context:
+
+**Development Intents:**
+- "I want to build/create/implement something" → **Request Mode**
+- "I need to start a new project" → **Setup Mode**
+- "I want to improve performance" → **Optimize Mode**
+- "I need to design the system architecture" → **Architecture Mode**
+
+**Problem-Solving Intents:**
+- "Something is broken/not working" → **Debug Mode**
+- "I need to fix an issue" → **Refresh Mode**
+- "I'm confused about how to proceed" → **Help Mode**
+
+**Information Intents:**
+- "I want to understand/learn about something" → **Question Mode**
+- "I need documentation" → **Documentation Mode**
+- "I want to research alternatives" → **Research Mode**
+
+**Quality & Maintenance Intents:**
+- "I need to clean up the code" → **Clean Mode**
+- "I want to add tests" → **TestCoverage Mode**
+- "I need to review the code" → **Review Mode**
+- "I want to check security" → **SecurityAudit Mode**
+
+### 3. Context Clues (Secondary)
+Use additional context for disambiguation:
+
+**File Types:**
+- `.md` files mentioned → **Documentation Mode**
+- Test files mentioned → **TestCoverage Mode**
+- Config files mentioned → **Setup Mode**
+
+**Technical Terms:**
+- Docker, K8s, deployment → **Deploy Mode**
+- OWASP, CVE, security → **SecurityAudit Mode**
+- Performance, memory, CPU → **Optimize Mode**
+- Frontend, UI, UX → **UXAudit Mode**
+
+**Action Patterns:**
+- Question words (what, why, how) → **Question Mode**
+- Confusion indicators (help, stuck, confused) → **Help Mode**
+- Problem indicators (broken, error, not working) → **Debug Mode**
+
+### 4. Fallback Logic (Lowest Priority)
+If intent is unclear, use this hierarchy:
+
+1. **Question Detection**: Contains question words → **Question Mode**
+2. **Help Detection**: Indicates confusion → **Help Mode**
+3. **Debug Detection**: Mentions problems → **Debug Mode**
+4. **Default**: **Request Mode** with clarification
+
+## Enhanced Intent Matching System
+
+### Pattern Matching Strategy:
+
+1. **Exact Word Matching**: Use word boundaries to avoid partial matches
+2. **Context-Aware Patterns**: Consider surrounding words and phrases
+3. **Priority-Based Resolution**: Higher specificity patterns override general ones
+4. **Conflict Resolution**: Use context clues to disambiguate ambiguous matches
+
+### Intent Patterns (Refined - Ordered by Specificity):
+
+**Setup Intent**: \b(initialize|bootstrap|scaffold|setup|install|configure|start new|begin|create project|new project|environment)\b
+**Help Intent**: \b(help|stuck|confused|dont know|what should I|how do I|where do I start|what can you do|guidance|assistance|guide|support|im confused|i need help|i dont know what to do|what should i do|how do i proceed|where do i start|what can you do|i need guidance|i need assistance)\b
+**Research Intent**: \b(research|investigate|compare|analyze|evaluate|study|POC|proof of concept|explore)\b
+**Documentation Intent**: \b(document|docs|README|API docs|guide|manual|documentation|write docs)\b
+**Refresh Intent**: \b(fix|debug|error|issue|broken|bug|problem|resolve|repair|troubleshoot|correct|repair)\b
+**Question Intent**: \b(what|why|how|when|where|who|which|is|are|does|do|can|should|would|could|explain|tell me|understand|difference|whats|how do|why do|what is|why do|how do|when should|where is|who maintains|which approach|is this|are there|does this|do I need|can I use|should I|would this|could you)\b
+**Request Intent**: \b(implement|add|create|build|develop|feature|function|integrate|connect|make|generate|write|construct|request|update)\b
+
+### Context-Specific Patterns (Higher Priority):
+
+**TestCoverage Context**: \b(test|coverage|unit test|integration test|testing|spec|test suite|test coverage)\b
+**Deploy Context**: \b(deploy|release|publish|CI/CD|pipeline|production|staging|deployment|ship)\b
+**Clean Context**: \b(cleanup|refactor|remove|delete|simplify|organize|tidy|unused|clean|restructure)\b
+**ProjectClean Context**: \b(full cleanup|project-wide|remove all|clean entire|audit files|comprehensive cleanup)\b
+**Review Context**: \b(review|analyze|check|inspect|evaluate|assess|critique|examine)\b
+**Optimize Context**: \b(improve|faster|performance|speed up|efficiency|memory|CPU|latency|optimize|enhance|boost|poor|high|excessive|too high|speed up|make it faster|improve efficiency|boost performance|enhance speed)\b
+**Architecture Context**: \b(design|plan|architect|structure|organize|system|components|patterns|architecture|blueprint)\b
+**DXDesign Context**: \b(developer experience|DX|CLI|tooling|workflow|ease of use|developer tools|dev experience)\b
+**UXAudit Context**: \b(user experience|UX|usability|interface|frontend|user flow|user interface|UI/UX)\b
+**SecurityAudit Context**: \b(security|vulnerability|audit|scan|secure|CVE|OWASP|security check|security review)\b
+**Debug Context**: \b(error|bug|issue|problem|broken|not working|debug|troubleshoot|fix|resolve|exception|crash|failure|timeout|hang|strange|unexpected|weird|wrong|performance issue|slow|memory leak|bottleneck|the app is broken|its not working|theres an error|exception occurred|app crashed|system failure|timeout error|app is hanging|strange behavior|unexpected result|weird issue|wrong output|memory leak detected|bottleneck found)\b
+**Question Context**: \?|question|ask|inquiry|query|interrogative
+
+### Advanced Pattern Matching Rules:
+
+1. **Phrase Context Analysis**: Consider multi-word phrases for better accuracy
+2. **Priority Order**: Context patterns > Intent patterns > Fallback patterns
+3. **Word Boundary Enforcement**: Use \b to prevent partial word matches
+4. **Exclusion Patterns**: Certain words should not trigger specific modes in certain contexts
+5. **Phrase-Based Detection**: Use complete phrases for higher accuracy
+
+### Phrase-Based Patterns (Highest Priority):
+
+**Performance Phrases**: 
+- "performance is poor", "memory usage is high", "CPU usage is excessive", "latency is too high"
+- "need to speed up", "make it faster", "improve efficiency", "boost performance", "enhance speed"
+
+**Problem Phrases**:
+- "the app is broken", "it's not working", "there's an error", "exception occurred"
+- "app crashed", "system failure", "timeout error", "app is hanging"
+- "strange behavior", "unexpected result", "weird issue", "wrong output"
+- "memory leak detected", "bottleneck found"
+
+**Question Phrases**:
+- "what is the best way", "how should I", "why do we need", "when should I use"
+- "where is the config", "who maintains this", "which approach is better"
+- "is this secure", "are there any issues", "does this work", "do I need to update"
+- "can I use this", "should I refactor", "would this be better", "could you explain"
+
+**Help Phrases**:
+- "I'm confused about", "I need help understanding", "I don't know what to do"
+- "What should I do", "How do I proceed", "Where do I start", "What can you do"
+- "I need guidance", "I need assistance"
+
+### Conflict Resolution Rules:
+
+1. **Question Words in Context**: If question words appear in a development context, prioritize development intent
+2. **Action Words**: Words like "add", "create", "build" in technical context → Request Mode
+3. **Problem Indicators**: Words like "broken", "error", "not working" → Debug/Refresh Mode
+4. **Documentation Keywords**: "docs", "README", "API docs" → Documentation Mode
+5. **Testing Keywords**: "test", "coverage", "unit test" → TestCoverage Mode
+6. **Security Keywords**: "security", "audit", "vulnerability" → SecurityAudit Mode
+7. **Performance Keywords**: "performance", "optimize", "improve" → Optimize Mode
+
+### Pattern Matching Algorithm:
+
+1. **Explicit Tags**: Check for [MODE: X] first (highest priority)
+2. **Phrase-Based Patterns**: Check complete phrases for highest accuracy
+3. **Context Patterns**: Check specific context patterns (test, deploy, clean, etc.)
+4. **Intent Patterns**: Check general intent patterns (setup, help, research, etc.)
+5. **Fallback Patterns**: Use question words and general indicators
+6. **Default**: Request mode for unclear cases
+
+### Phrase Matching Implementation:
+
+**Performance Detection**:
+- Check for phrases like "performance is poor", "memory usage is high", "CPU usage is excessive"
+- Check for phrases like "need to speed up", "make it faster", "improve efficiency"
+- If found → **Optimize Mode**
+
+**Problem Detection**:
+- Check for phrases like "the app is broken", "it's not working", "there's an error"
+- Check for phrases like "strange behavior", "unexpected result", "weird issue"
+- If found → **Debug Mode**
+
+**Question Detection**:
+- Check for phrases like "what is the best way", "how should I", "why do we need"
+- Check for phrases like "is this secure", "are there any issues", "does this work"
+- If found → **Question Mode**
+
+**Help Detection**:
+- Check for phrases like "I'm confused about", "I need help understanding"
+- Check for phrases like "I don't know what to do", "What should I do"
+- If found → **Help Mode**
+
+## User Confirmation System
+
+### For Ambiguous Requests:
+When multiple intents are detected or intent is unclear, present options:
+
+```
+I can help you with this request using different approaches:
+
+1. **[Mode1]** - [brief description of what this mode does]
+2. **[Mode2]** - [brief description of what this mode does]  
+3. **[Mode3]** - [brief description of what this mode does]
+
+Which approach would you prefer? (Just reply with the number)
+```
+
+### For Unclear Requests:
+When intent cannot be determined:
+
+```
+I'm not sure what you'd like me to help with. Could you clarify:
+
+1. Are you asking a question? → [MODE: Question]
+2. Do you need help getting started? → [MODE: Help]  
+3. Do you want to build something? → [MODE: Request]
+4. Is something not working? → [MODE: Debug]
+
+Or use an explicit mode tag: [MODE: Request] Add user authentication
+```
+
+## Template Execution
+
+Once mode is determined, immediately switch to that template's specific workflow by fetching the corresponding rule from `.cursor/rules/templates-<mode>.mdc`:
+
+```
+[TASK]: <extracted from user request>
+[MODE]: <determined mode>
+[PROJECT CONTEXT]: <auto-detected or ask>
+[BRANCH]: <current branch or suggest>
+[YOLO_MODE]: on
+
+<Execute the specific template workflow>
+```
+
+## Debug Mode
+
+When debugging is needed, the router will provide detailed analysis:
+
+1. **Input Analysis**: Show the original request and any preprocessing
+2. **Pattern Matching**: Display which patterns were tested and their results
+3. **Priority Evaluation**: Show the priority system in action
+4. **Mode Selection**: Explain why a particular mode was chosen
+5. **Confidence Level**: Indicate confidence in the mode selection
+
+### Debug Output Format
+
+```
+[DEBUG] Router Analysis:
+- Input: "<original request>"
+- Explicit Tag: <found/not found>
+- Intent Patterns: <list of tested patterns>
+- Context Clues: <list of tested patterns>
+- Selected Mode: <mode> (Priority: <priority>)
+- Confidence: <high/medium/low>
+- Reasoning: <explanation>
+```
 
 ## Available Template Modes
 
@@ -48,113 +316,46 @@ When a user makes a request, you MUST:
 - **Help** - System guidance, new user assistance, how-to help (templates-help)
 - **Debug** - Error troubleshooting, issue resolution, systematic debugging (templates-debug)
 
-## Intent Matching System
+## Usage Examples
 
-### Keywords for Each Mode:
-
-**Request** (default): implement, add, create, build, develop, feature, function, integrate, connect
-**Setup**: initialize, bootstrap, scaffold, setup, install, configure, start new, begin
-**Architecture**: design, plan, architect, structure, organize, system, components, patterns
-**Optimize**: improve, faster, performance, speed up, efficiency, memory, CPU, latency
-**Refresh**: fix, debug, error, issue, broken, bug, problem, resolve, repair
-**Clean**: cleanup, refactor, remove, delete, simplify, organize, tidy, unused
-**ProjectClean**: full cleanup, project-wide, remove all, clean entire, audit files
-**TestCoverage**: test, coverage, unit test, integration test, testing, spec
-**Review**: review, analyze, check, inspect, evaluate, assess, critique
-**SecurityAudit**: security, vulnerability, audit, scan, secure, CVE, OWASP
-**Documentation**: document, docs, README, API docs, explain, guide, manual
-**DXDesign**: developer experience, DX, CLI, tooling, workflow, ease of use
-**UXAudit**: user experience, UX, usability, interface, frontend, user flow
-**Research**: research, investigate, compare, analyze, evaluate, study, POC
-**Deploy**: deploy, release, publish, CI/CD, pipeline, production, staging
-**Question**: what, why, how, when, where, who, which, is, are, does, do, can, should, would, could, explain, tell me, understand, difference
-**Help**: help, stuck, confused, new, don't know, what should I, how do I, where do I start, what can you do
-**Debug**: error, bug, issue, problem, broken, not working, debug, troubleshoot, fix, resolve, exception, crash, failure, timeout, hang, strange, unexpected, weird, wrong, performance issue, slow, memory leak, bottleneck
-
-### Context Clues:
-- **File types mentioned**: .md files → Documentation, test files → TestCoverage
-- **Infrastructure terms**: Docker, K8s → Deploy, Architecture  
-- **Security terms**: OWASP, CVE, scan → SecurityAudit
-- **Performance terms**: slow, memory, CPU → Optimize
-- **User-facing terms**: frontend, UI, UX → UXAudit
-
-## Template Execution
-
-Once mode is determined, immediately switch to that template's specific workflow by fetching the corresponding rule from `.cursor/rules/templates-<mode>.mdc`:
-
+### Explicit Mode Tags (Recommended for Power Users):
 ```
-[TASK]: <extracted from user request>
-[MODE]: <determined mode>
-[PROJECT CONTEXT]: <auto-detected or ask>
-[BRANCH]: <current branch or suggest>
-[YOLO_MODE]: on
-
-<Execute the specific template workflow>
+[MODE: Request] Add user authentication to the API
+[MODE: Question] How does dependency injection work?
+[MODE: Debug] The login form is not working
+[MODE: Setup] Initialize a new React project
+[MODE: Documentation] Create API documentation
 ```
 
-## Clarification Prompt Format
-
-When multiple modes could apply:
-
+### Natural Language (Works with Intent Analysis):
 ```
-I can help you with this request using different approaches:
-
-1. **[Mode1]** - [brief description of what this mode does]
-2. **[Mode2]** - [brief description of what this mode does]  
-3. **[Mode3]** - [brief description of what this mode does]
-
-Which approach would you prefer? (Just reply with the number)
+Add user authentication to the API
+How does dependency injection work?
+The login form is not working
+Set up a new React project
+Create documentation for the API
 ```
 
-## Multi-Mode Scenarios
+### Context-Aware Examples:
+```
+"Check the README" → Documentation Mode (file type context)
+"Fix the login bug" → Refresh Mode (problem-solving intent)
+"Help me understand this" → Help Mode (confusion indicator)
+"Research authentication libraries" → Research Mode (investigation intent)
+```
 
-Common combinations requiring clarification:
-- **Clean + ProjectClean**: Specific cleanup vs full project cleanup
-- **Request + Setup**: New feature vs new project  
-- **Review + SecurityAudit**: General review vs security-focused audit
-- **Documentation + DXDesign**: User docs vs developer tooling docs
-- **Optimize + Architecture**: Performance tweaks vs architectural redesign
-- **Question + Help**: Information request vs system guidance
-- **Debug + Refresh**: Error investigation vs bug fixing
-- **Help + Setup**: New user guidance vs project initialization
+## Template Integration
+
+All templates are available as cursor rules in `.cursor/rules/templates-<mode>.mdc`. Use the `fetch_rules` tool to access specific template workflows when mode is determined.
 
 ## Error Handling
 
-- If request is completely unclear: Ask for clarification and suggest Request mode
-- If technical terms are unfamiliar: Research mode for investigation
-- If multiple complex systems involved: Architecture mode for planning
-- If user mentions bugs/issues: Refresh mode for fixes
-- If user asks general questions: Question mode for explanations
-- If user needs system guidance: Help mode for assistance
-- If user reports errors/issues: Debug mode for troubleshooting
+- **Conflicting intents**: Present clarification options
+- **Unclear requests**: Ask for clarification with mode suggestions
+- **Technical terms**: Suggest Research mode for investigation
+- **Multiple systems**: Suggest Architecture mode for planning
+- **Router failures**: Fall back to Request mode with explanation
 
 ## Template Integration
 
-All templates are available as cursor rules in `.cursor/rules/templates-<mode>.mdc`. Use the `fetch_rules` tool to access specific template workflows when mode is determined.
-
-## Context File Management
-
-The system maintains a `cursorContext.json` file to track implementation summaries and usage statistics. See `context-analysis.mdc` for detailed constraints and management rules.
-
-### Context File Structure
-- **System Info**: Version, creation date, last update
-- **Template Summaries**: Single-line implementation summaries for each template (≤100 chars)
-- **Usage Stats**: Request counts and mode usage tracking (max 50 requests)
-- **Context History**: Recent activities and last task information (max 10 entries)
-
-### Context File Operations
-- **First Use**: Create `cursorContext.json` if it doesn't exist
-- **Mode Selection**: Update usage statistics when a mode is selected
-- **Task Completion**: Store implementation summaries and context updates
-- **History Tracking**: Maintain recent activity log for continuity
-- **Size Management**: Enforce 5KB limit and prune old data
-
-### Context File Access
-- **Read**: Access template summaries and usage patterns
-- **Write**: Update statistics and store implementation results
-- **Backup**: Preserve context history for future reference
-- **Constraints**: Follow context analysis rule for size limits
-
-## Template Integration
-
-All templates are available as cursor rules in `.cursor/rules/templates-<mode>.mdc`. Use the `fetch_rules` tool to access specific template workflows when mode is determined.
+All templates are available as cursor rules in .cursor/rules/templates-<mode>.mdc. Use the fetch_rules tool to access specific template workflows when mode is determined.

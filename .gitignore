@@ -81,4 +81,12 @@ out/
 
 # Context and session files
 context.json
-session.json 
+session.json
+
+# Diagnostic and development files
+diagnose-*.ps1
+fix-*.ps1
+test-*.sh
+debug-*.sh
+*.diagnostic
+*.test 

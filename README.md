@@ -1,497 +1,269 @@
-# 🚀 Cursor Template Router
+# Cursor Template Router System
 
-> **Intelligent workflow routing for Cursor AI - Automatically match your requests to the perfect development workflow**
+An intelligent task router that analyzes user requests and matches them to appropriate workflow templates using intent-based classification and explicit mode tags.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Cursor](https://img.shields.io/badge/Cursor-IDE-blue.svg)](https://cursor.sh)
-[![Template Count](https://img.shields.io/badge/Templates-18-green.svg)](https://github.com/ScrapPack/CursorUpgrade)
+## 🚀 Features
 
-## 🎯 The Problem
+- **Intent-Based Classification**: Understands semantic meaning beyond simple keywords
+- **Explicit Mode Tags**: Precise control with `[MODE: Request]` syntax
+- **Context Awareness**: Uses file types, technical terms, and action patterns
+- **User Confirmation**: Clarification system for ambiguous requests
+- **Priority-Based Routing**: Clear hierarchy for mode selection
+- **18 Specialized Templates**: Cover development, quality, documentation, and support workflows
 
-Cursor AI is powerful, but it can be inconsistent. You ask for "improve the codebase" and sometimes get architecture suggestions, sometimes get performance optimizations, sometimes get code cleanup. The AI doesn't know which workflow to follow.
+## 📦 Installation
 
-**What if Cursor could automatically detect your intent and use the right workflow every time?**
-
-## ✨ The Solution
-
-The **Cursor Template Router** is an intelligent system that analyzes your requests and automatically routes them to specialized workflow templates. Instead of guessing, it uses sophisticated keyword matching and intent analysis to provide consistent, high-quality results.
-
-### 🎯 What It Does
-
-- **🔍 Intelligent Analysis**: Analyzes your request using keyword matching and context clues
-- **🎯 Smart Routing**: Routes to 1 of 18 specialized workflow templates
-- **🤔 Clarification**: Asks for clarification when multiple approaches could work
-- **⚡ Consistent Results**: Same request type = same workflow = consistent results
-- **🛠️ Native Integration**: Uses Cursor's official `.cursor/rules` system
-
-## 🏗️ System Architecture
-
-```
-User Request → Keyword Analysis → Intent Matching → Template Selection → Workflow Execution
-```
-
-### 📋 Available Workflows
-
-| Category | Template | Purpose | Example Trigger |
-|----------|----------|---------|-----------------|
-| **🛠️ Development** | Request | General feature development | "Add user authentication" |
-| **🚀 Setup** | Setup | Project initialization | "Set up new React project" |
-| **🏛️ Architecture** | Architecture | System design | "Design microservices" |
-| **⚡ Performance** | Optimize | Performance improvements | "Optimize database queries" |
-| **🐛 Maintenance** | Refresh | Bug fixes | "Fix login bug" |
-| **🧹 Code Quality** | Clean | Code cleanup | "Clean up unused imports" |
-| **🗂️ Project Clean** | ProjectClean | Full project cleanup | "Clean entire codebase" |
-| **🧪 Testing** | TestCoverage | Test improvements | "Add test coverage" |
-| **👀 Review** | Review | Code review | "Review pull request" |
-| **🔒 Security** | SecurityAudit | Security assessment | "Security audit" |
-| **📚 Documentation** | Documentation | Documentation | "Create API docs" |
-| **👨‍💻 Developer Experience** | DXDesign | DX improvements | "Improve CLI" |
-| **🎨 User Experience** | UXAudit | UX review | "Audit user flow" |
-| **🔬 Research** | Research | Technology research | "Research GraphQL vs REST" |
-| **🚀 Operations** | Deploy | Deployment | "Deploy to production" |
-| **❓ User Support** | Question | General questions & explanations | "What is dependency injection?" |
-| **🆘 Help** | Help | System guidance & new user assistance | "Help me get started" |
-| **🐛 Debug** | Debug | Error troubleshooting & issue resolution | "My app is crashing" |
-
-## 🚀 Quick Start
-
-### 1. Install Templates
+### Automated Installation (Recommended)
 
 ```bash
 # Clone the repository
-git clone https://github.com/ScrapPack/CursorUpgrade.git
+git clone https://github.com/yourusername/cursor-template-router.git
+cd cursor-template-router
 
-# Copy templates to your project
-cp -r CursorUpgrade/.cursor/rules .cursor/
-
-# Or use the automated installer
-curl -sSL https://raw.githubusercontent.com/ScrapPack/CursorUpgrade/main/install.sh | bash
+# Run the installation script
+./install.sh
 ```
 
-### 2. Restart Cursor
+### Manual Installation
 
-Close and reopen Cursor to load the new templates.
+1. **Clone the repository**:
+```bash
+   git clone https://github.com/yourusername/cursor-template-router.git
+   cd cursor-template-router
+   ```
 
-### 3. Test It Out
+2. **Copy rules to Cursor**:
+```bash
+   # Create .cursor/rules directory if it doesn't exist
+   mkdir -p ~/.cursor/rules
 
-Try these requests in Cursor:
+   # Copy all template files
+   cp .cursor/rules/* ~/.cursor/rules/
+```
+
+3. **Restart Cursor** to load the new rules.
+
+### Global Installation
+
+For system-wide availability:
 
 ```bash
-# Should trigger Request mode
-"Add user authentication to the API"
-
-# Should trigger Documentation mode  
-"Create API documentation"
-
-# Should trigger Setup mode
-"Set up a new React project"
-
-# Should trigger clarification prompt
-"Improve the codebase"
+# Run with global flag
+./install.sh --global
 ```
 
-## 📖 How It Works
+This installs the router system globally for all Cursor projects.
 
-### 1. Request Analysis
+## 🎯 Usage
 
-The router analyzes your request using multiple layers:
+### Explicit Mode Tags (Recommended for Power Users)
 
-```javascript
-// Example analysis of "Build a readme file that explains the system"
-{
-  keywords: ["build", "readme", "explains"],
-  primaryObject: "readme file", // Documentation artifact
-  intent: "documentation creation",
-  context: "explanatory content",
-  mode: "Documentation"
-}
+For precise control and consistent behavior:
+
+```
+[MODE: Request] Add user authentication to the API
+[MODE: Question] How does dependency injection work?
+[MODE: Debug] The login form is not working
+[MODE: Setup] Initialize a new React project
+[MODE: Documentation] Create API documentation
 ```
 
-### 2. Keyword Matching
+### Natural Language (Intent-Based)
 
-Each template has specific keywords that trigger it:
+For conversational interaction:
 
-| Mode | Keywords |
-|------|----------|
-| **Request** | implement, add, create, build, develop |
-| **Documentation** | document, docs, README, explain, guide |
-| **Setup** | initialize, bootstrap, scaffold, setup |
-| **Architecture** | design, plan, architect, structure |
-| **Optimize** | improve, faster, performance, speed |
+```
+Add user authentication to the API
+How does dependency injection work?
+The login form is not working
+Set up a new React project
+Create documentation for the API
+```
 
-### 3. Intent Hierarchy
+### Context-Aware Examples
 
-When multiple modes match, the system uses intent hierarchy:
+The router understands context:
 
-1. **Primary Object**: What's being worked on?
-2. **Action Context**: What type of work?
-3. **Scope**: Individual vs. system-wide?
+```
+"Check the README" → Documentation Mode (file type context)
+"Fix the login bug" → Refresh Mode (problem-solving intent)
+"Help me understand this" → Help Mode (confusion indicator)
+"Research authentication libraries" → Research Mode (investigation intent)
+```
 
-### 4. Template Execution
+## 🔧 Available Templates
 
-Once a mode is selected:
+### Development Workflows
+- **Request** - General task implementation and feature development
+- **Setup** - Project initialization, scaffolding, environment setup
+- **Architecture** - System design, component planning, tech stack decisions
+- **Optimize** - Performance improvements, efficiency enhancements
+- **Refresh** - Bug fixes, maintenance, issue resolution
 
-1. Loads the specific template workflow
-2. Extracts task details from your request
-3. Executes the structured 5-6 step process
-4. Provides consistent, high-quality results
+### Quality & Testing
+- **Clean** - Code cleanup, refactoring, removing dead code
+- **ProjectClean** - Full project cleanup, removing unused files/dependencies
+- **TestCoverage** - Adding tests, improving test coverage
+- **Review** - Code review, PR analysis, quality assessment
+- **SecurityAudit** - Security scanning, vulnerability assessment
 
-## 🛠️ Installation
+### Documentation & Experience
+- **Documentation** - Creating/updating docs, API documentation
+- **DXDesign** - Developer experience improvements, tooling, CLI enhancements
+- **UXAudit** - User experience review, usability improvements
+- **Research** - Technology research, proof of concepts, analysis
 
-### Method 1: Manual Installation
+### Operations
+- **Deploy** - Deployment workflows, CI/CD, release management
+
+### User Support & Guidance
+- **Question** - General questions, explanations, informational requests
+- **Help** - System guidance, new user assistance, how-to help
+- **Debug** - Error troubleshooting, issue resolution, systematic debugging
+
+## 🎯 How It Works
+
+### Priority System
+
+1. **Explicit Mode Tags** (Highest Priority)
+   - Always honored when present
+   - Format: `[MODE: Request] Add user authentication`
+   - Recommended for power users and precise control
+
+2. **Intent-Based Classification** (Primary)
+   - Analyzes semantic meaning and context
+   - Understands user intent beyond simple keywords
+   - Provides more accurate mode selection
+
+3. **Context Clues** (Secondary)
+   - Uses file types, technical terms, and action patterns
+   - Helps disambiguate similar requests
+   - Improves accuracy for edge cases
+
+4. **Fallback Logic** (Lowest Priority)
+   - Graceful degradation when intent is unclear
+   - User confirmation for ambiguous cases
+   - Clear guidance for next steps
+
+### Intent Classification
+
+The router understands different types of intents:
+
+**Development Intents:**
+- "I want to build/create/implement something" → Request Mode
+- "I need to start a new project" → Setup Mode
+- "I want to improve performance" → Optimize Mode
+
+**Problem-Solving Intents:**
+- "Something is broken/not working" → Debug Mode
+- "I need to fix an issue" → Refresh Mode
+- "I'm confused about how to proceed" → Help Mode
+
+**Information Intents:**
+- "I want to understand/learn about something" → Question Mode
+- "I need documentation" → Documentation Mode
+- "I want to research alternatives" → Research Mode
+
+## 🔧 Configuration
+
+### Customization
+
+You can customize the router behavior by editing `.cursor/rules/template-router.mdc`:
+
+- Add new intent patterns
+- Modify keyword matching
+- Adjust priority order
+- Customize confirmation prompts
+
+### Context File
+
+The system maintains a `cursorContext.json` file to track:
+- Implementation summaries
+- Usage statistics
+- Recent activities
+- Mode preferences
+
+## 📝 Coding Standards & Character Usage
+
+### Special Character Guidelines
+
+**❌ AVOID in Code and Scripts:**
+- **Emojis** (😀, 🚀, ✅, ❌, etc.) - Can cause encoding issues, parsing errors, and compatibility problems
+- **Unicode symbols** (→, ←, ↑, ↓, etc.) - May not render correctly in all environments
+- **Smart quotes** ("", '', etc.) - Use standard ASCII quotes instead
+- **Special formatting characters** - Stick to basic ASCII for maximum compatibility
+
+**✅ USE ONLY in Documentation:**
+- Emojis and special characters are acceptable in:
+  - README files
+  - Documentation files (.md, .txt)
+  - Comments (sparingly)
+  - User-facing content
+  - Stylization purposes only
+
+**Best Practices:**
+- Use standard ASCII characters for all code, scripts, and configuration files
+- Replace emojis with descriptive text (e.g., "PASS" instead of ✅, "FAIL" instead of ❌)
+- Use simple text indicators for status and progress
+- Ensure all code works across different operating systems and environments
+- Test scripts with basic ASCII characters only
+
+**Examples:**
 
 ```bash
-# Create the rules directory
-mkdir -p .cursor/rules
+# ❌ Bad (in code/scripts):
+Write-Host "✅ Test passed!" -ForegroundColor Green
+Write-Host "❌ Test failed!" -ForegroundColor Red
 
-# Copy template files
-cp /path/to/templates/template-router.mdc .cursor/rules/
-cp /path/to/templates/templates-*.mdc .cursor/rules/
+# ✅ Good (in code/scripts):
+Write-Host "PASS: Test completed successfully" -ForegroundColor Green
+Write-Host "FAIL: Test encountered an error" -ForegroundColor Red
 ```
-
-### Method 2: Automated Script
-
-```bash
-# Download and run installer
-curl -sSL https://raw.githubusercontent.com/ScrapPack/CursorUpgrade/main/install.sh | bash
-```
-
-### Method 3: Global Installation
-
-```bash
-# Install for all projects (macOS/Linux)
-mkdir -p ~/.cursor/globalStorage/cursor.cursor-workspace/rules
-cp .cursor/rules/*.mdc ~/.cursor/globalStorage/cursor.cursor-workspace/rules/
-
-# Windows PowerShell
-$globalDir = "$env:APPDATA\Cursor\User\globalStorage\cursor.cursor-workspace\rules"
-New-Item -ItemType Directory -Path $globalDir -Force
-Copy-Item ".cursor\rules\*.mdc" $globalDir -Force
-```
-
-## 🎯 Usage Examples
-
-### Clear Mode Selection
-
-```bash
-# Documentation Mode
-"Create API documentation" → Documentation workflow
-"Write setup guide" → Documentation workflow
-
-# Request Mode  
-"Add user authentication" → Request workflow
-"Build payment system" → Request workflow
-
-# Setup Mode
-"Initialize new React project" → Setup workflow
-"Set up development environment" → Setup workflow
-```
-
-### Multi-Mode Scenarios
-
-When multiple approaches could work, you get a clarification prompt:
-
-```
-I can help you with this request using different approaches:
-
-1. **Clean** - Remove unused code and refactor specific modules
-2. **ProjectClean** - Full project cleanup across entire codebase
-3. **Optimize** - Focus on performance improvements
-
-Which approach would you prefer? (Just reply with the number)
-```
-
-### Explicit Mode Selection
-
-You can also explicitly specify the mode:
-
-```bash
-"[MODE: SecurityAudit] Check the codebase"
-"[MODE: Research] Compare React vs Vue"
-"[MODE: UXAudit] Review the checkout flow"
-
-### User Support Modes
-
-For inexperienced users or when you need guidance:
-
-**Question Mode**: Ask general questions and get explanations
-- "What is dependency injection?"
-- "Why do we need unit tests?"
-- "How does authentication work?"
-
-**Help Mode**: Get system guidance and examples
-- "Help me get started"
-- "I don't know what to ask"
-- "What can this system do?"
-
-**Debug Mode**: Systematic troubleshooting for issues
-- "My app is crashing"
-- "The function returns wrong results"
-- "The page is loading slowly"
-```
-
-## 🚨 Common Pain Points & Solutions
-
-### 1. Templates Not Loading
-
-**Problem**: Templates don't appear to be working
-```bash
-# Check directory structure
-ls -la .cursor/rules/
-
-# Verify file permissions
-chmod 644 .cursor/rules/*.mdc
-
-# Restart Cursor completely
-# Close and reopen Cursor
-```
-
-**Solution**: Ensure `.cursor/rules/` directory exists and contains `.mdc` files
-
-### 2. Mode Detection Issues
-
-**Problem**: Wrong mode is selected
-```bash
-# Use explicit mode selection
-"[MODE: Documentation] Create README"
-
-# Check keyword mappings
-grep -A 5 "Keywords for Each Mode" .cursor/rules/template-router.mdc
-```
-
-**Solution**: Use explicit mode selection or check keyword mappings
-
-### 3. Template Execution Problems
-
-**Problem**: Templates don't execute properly
-```bash
-# Verify template format
-head -10 .cursor/rules/templates-request.mdc
-
-# Check for syntax errors
-# Templates should start with # and contain proper markdown
-```
-
-**Solution**: Ensure templates are properly formatted MDC files
-
-### 4. Performance Issues
-
-**Problem**: System feels slow
-```bash
-# Templates are lazy-loaded, so this shouldn't be an issue
-# If it is, check for large template files or syntax errors
-```
-
-**Solution**: Templates are loaded on-demand, minimal performance impact
-
-## 🔧 Customization
-
-### Project-Specific Templates
-
-Create custom templates for your project:
-
-```bash
-# Copy and customize a template
-cp .cursor/rules/templates-request.mdc .cursor/rules/templates-myproject-request.mdc
-
-# Edit the template for your specific needs
-# - Update commands for your tech stack
-# - Add project-specific workflows
-# - Include team conventions
-```
-
-### Language-Specific Customization
-
-```bash
-# Python project template
-cat > .cursor/rules/templates-python-request.mdc << 'EOF'
-# Python Request Template
-
-## Custom Commands
-- Install: `pip install -r requirements.txt`
-- Test: `pytest`
-- Lint: `flake8`
-- Format: `black .`
-
-## Python-Specific Workflows
-- Virtual environment setup
-- Dependency management
-- Type hints and documentation
-EOF
-```
-
-### Team Conventions
-
-```bash
-# Team standards template
-cat > .cursor/rules/templates-team-standards.mdc << 'EOF'
-# Team Development Standards
-
-## Code Style
-- Use TypeScript for all new code
-- Follow ESLint configuration
-- Use Prettier for formatting
-
-## Git Workflow
-- Use conventional commits
-- Create feature branches from main
-- Require PR reviews
-EOF
-```
-
-## 🧪 Testing
-
-### Test Template Loading
-
-```bash
-# Create test script
-cat > test-templates.sh << 'EOF'
-#!/bin/bash
-echo "Testing Cursor Template System..."
-
-for template in request setup architecture optimize refresh clean projectclean testcoverage review securityaudit documentation dxdesign uxaudit research deploy question help debug; do
-    if [ -f ".cursor/rules/templates-${template}.mdc" ]; then
-        echo "✅ templates-${template}.mdc"
-    else
-        echo "❌ Missing templates-${template}.mdc"
-        exit 1
-    fi
-done
-
-echo "🎉 All templates present!"
-EOF
-
-chmod +x test-templates.sh
-./test-templates.sh
-```
-
-### Test Mode Selection
-
-Try these test requests:
-
-```bash
-# Should work without clarification
-"Add authentication" → Request mode
-"Create documentation" → Documentation mode
-"Set up project" → Setup mode
-"What is dependency injection?" → Question mode
-"Help me get started" → Help mode
-"My app is crashing" → Debug mode
-
-# Should trigger clarification
-"Improve the app" → Multiple modes
-"Fix the system" → Multiple modes
-```
-
-## 🤝 Contributing
-
-We welcome contributions! Here's how to get started:
-
-### 1. Fork the Repository
-
-```bash
-git clone https://github.com/ScrapPack/CursorUpgrade.git
-cd CursorUpgrade
-```
-
-### 2. Create a Feature Branch
-
-```bash
-git checkout -b feature/new-template
-```
-
-### 3. Add Your Template
-
-```bash
-# Create new template
-cp .cursor/rules/templates-request.mdc .cursor/rules/templates-mytemplate.mdc
-
-# Update router with new keywords
-# Edit .cursor/rules/template-router.mdc
-```
-
-### 4. Test Your Changes
-
-```bash
-# Test template loading
-./test-templates.sh
-
-# Test mode selection
-# Try requests that should trigger your template
-```
-
-### 5. Submit a Pull Request
-
-```bash
-git add .
-git commit -m "feat: add new template for X"
-git push origin feature/new-template
-```
-
-## 📋 Template Development Guide
-
-### Template Structure
-
-Each template follows this structure:
 
 ```markdown
-# Template Name
-
-## Overview
-Brief description of when to use this template
-
-## Execution Workflow
-
-### 1. Step One
-- Description of what to do
-- Commands to run
-- Expected outcomes
-
-### 2. Step Two
-- Next steps
-- Validation criteria
-- Error handling
-
-### 3. Step Three
-- Final steps
-- Reporting format
-- Context updates
+# ✅ Acceptable (in documentation):
+# 🚀 Getting Started
+This guide will help you set up the project...
 ```
-
-### Adding New Templates
-
-1. **Create the template file**: `.cursor/rules/templates-<name>.mdc`
-2. **Update the router**: Add keywords to `.cursor/rules/template-router.mdc`
-3. **Test thoroughly**: Ensure mode selection works correctly
-4. **Document**: Update this README with new template
 
 ## 🐛 Troubleshooting
 
-### Debug Mode
+### Router Not Triggering
 
-```bash
-# Enable debug logging (if supported)
-export CURSOR_DEBUG=1
+1. **Check for explicit mode tags** - they always work
+2. **Try rephrasing** your request with clearer intent
+3. **Use the confirmation system** when presented with options
+4. **Check for conflicting global rules** in Cursor settings
 
-# Test with verbose output
-# In Cursor: "Add authentication" (should show mode selection process)
-```
+### Incorrect Mode Selection
 
-### Common Error Messages
+1. **Use explicit mode tags** to override automatic selection
+2. **Rephrase your request** with clearer intent
+3. **Use the confirmation system** to choose the correct mode
+4. **Provide feedback** on the selection process
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| "Templates not found" | Missing `.cursor/rules/` directory | Run installation script |
-| "Wrong mode selected" | Keyword mapping issue | Use explicit mode selection |
-| "Template not executing" | MDC syntax error | Check template format |
-| "Performance issues" | Large template files | Optimize template size |
+### Ambiguous Requests
 
-### Getting Help
+If you get clarification prompts:
 
-1. **Check the issues**: [GitHub Issues](https://github.com/your-username/cursor-template-router/issues)
-2. **Read the docs**: Check this README and template files
-3. **Test mode selection**: Use explicit mode selection if automatic fails
-4. **Customize templates**: Adapt templates for your specific needs
+1. **Choose the option** that best matches your intent
+2. **Use explicit mode tags** in future similar requests
+3. **Rephrase your request** to be more specific
+4. **Learn from the suggestions** for better future requests
+
+## 📚 Documentation
+
+- [Router Improvements](ROUTER_IMPROVEMENTS.md) - Detailed explanation of the improved system
+- [Template Setup](CURSOR_TEMPLATE_SETUP.md) - Setup and configuration guide
+- [Usage Examples](examples/) - Common usage patterns and examples
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
 ## 📄 License
 
@@ -499,29 +271,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **Cursor Team**: For the amazing AI-powered IDE
-- **Community**: For feedback and contributions
-- **Open Source**: For inspiration and best practices
-
-## 📊 Project Status
-
-- ✅ **Core Router**: Complete and tested
-- ✅ **15 Templates**: All workflows implemented
-- ✅ **Documentation**: Comprehensive guides
-- ✅ **Installation**: Automated scripts
-- 🔄 **Community Templates**: In development
-- 🔄 **Advanced Features**: Planned
-
-## 🚀 Roadmap
-
-- [ ] **Community Templates**: User-submitted templates
-- [ ] **Template Marketplace**: Browse and install templates
-- [ ] **Advanced Analytics**: Usage statistics and insights
-- [ ] **IDE Integration**: Direct integration with Cursor settings
-- [ ] **Team Features**: Shared templates and collaboration
-
----
-
-**Made with ❤️ for the Cursor community**
-
-If this project helps you, please give it a ⭐ on GitHub! 
+- Inspired by the need for consistent AI assistant workflows
+- Built for the Cursor IDE community
+- Designed to improve developer productivity and code quality 

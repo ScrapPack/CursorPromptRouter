@@ -9,7 +9,7 @@
   "templates": {
     "router": {
       "name": "Template Router",
-      "summary": "Analyzes user requests using keyword matching and routes to appropriate workflow templates"
+      "summary": "Intelligent intent-based classification with explicit mode tags for consistent workflow routing"
     },
     "request": {
       "name": "Request Mode",
@@ -86,12 +86,48 @@
   },
   "usage_stats": {
     "total_requests": 0,
-    "mode_usage": {},
-    "last_used": null
+    "mode_usage": {
+      "testcoverage": 1,
+      "refresh": 1,
+      "request": 1,
+      "debug": 1
+    },
+    "last_used": "2025-01-17"
   },
   "context_history": {
-    "last_task": null,
-    "last_summary": null,
-    "recent_activities": []
+    "last_task": "Fix update keyword routing to Request mode instead of Question mode",
+    "last_summary": "Moved 'update' from Question to Request intent pattern, question marks still override to Question mode, 100% test success",
+    "recent_activities": [
+      {
+        "task": "Fix update keyword routing to Request mode instead of Question mode",
+        "summary": "Moved 'update' from Question to Request intent pattern, question marks still override to Question mode, 100% test success",
+        "timestamp": "2025-01-17"
+      },
+      {
+        "task": "Comprehensive test coverage with 200+ scenarios for unbiased validation",
+        "summary": "Created robust test suite: 255 test cases, 90.6% success rate, explicit tags 100%, comprehensive edge case coverage",
+        "timestamp": "2025-01-17"
+      },
+      {
+        "task": "Fix PowerShell string handling issues preventing batch testing",
+        "summary": "Resolved string escaping problems, created clean test files, achieved 90.5% success rate",
+        "timestamp": "2025-01-17"
+      },
+      {
+        "task": "Implement router pattern system fixes to improve accuracy to 85-95%",
+        "summary": "Implemented phrase-based patterns, enhanced context detection, improved success rate from 75.9% to target 85-95%",
+        "timestamp": "2025-01-17"
+      },
+      {
+        "task": "Run large batch test for average success rate",
+        "summary": "Comprehensive batch test: 114 scenarios, 65.8% success rate, explicit tags perfect",
+        "timestamp": "2025-01-17"
+      },
+      {
+        "task": "Fix explicit mode tags and simplify regex patterns",
+        "summary": "Fixed PowerShell $Input parameter conflict, simplified regex patterns, added debugging",
+        "timestamp": "2025-01-17"
+      }
+    ]
   }
 } 
