@@ -1,6 +1,6 @@
 ---
 name: "Context Analysis Rule"
-agentRequested: true
+alwaysApply: true
 description: "Analyzes and manages cursorContext.json with constraints to limit context length and prevent bloat"
 ---
 
