@@ -90,17 +90,19 @@
       "testcoverage": 1,
       "refresh": 1,
       "request": 1,
-      "debug": 1
+      "debug": 1,
+      "clean": 1,
+      "documentation": 1
     },
     "last_used": "2025-01-17"
   },
   "context_history": {
-    "last_task": "Fix update keyword routing to Request mode instead of Question mode",
-    "last_summary": "Moved 'update' from Question to Request intent pattern, question marks still override to Question mode, 100% test success",
+    "last_task": "Update README with comprehensive router system documentation",
+    "last_summary": "Added detailed explanation of explicit mode tags, pattern matching system, and usage examples",
     "recent_activities": [
       {
-        "task": "Fix update keyword routing to Request mode instead of Question mode",
-        "summary": "Moved 'update' from Question to Request intent pattern, question marks still override to Question mode, 100% test success",
+        "task": "Update README with comprehensive router system documentation",
+        "summary": "Added detailed explanation of explicit mode tags, pattern matching system, and usage examples",
         "timestamp": "2025-01-17"
       },
       {
