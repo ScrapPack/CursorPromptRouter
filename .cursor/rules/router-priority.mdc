@@ -1,0 +1,167 @@
+---
+name: Router Priority Rule
+priority: 1
+alwaysApply: true
+---
+
+# Router Priority Rule
+
+## Purpose
+This rule ensures that the Cursor Template Router System is the first rule read in the hierarchy, establishing proper precedence for mode selection and template routing.
+
+## Priority Configuration
+
+### Rule Hierarchy
+- **Priority Level**: 1 (Highest)
+- **Execution Order**: First
+- **Dependencies**: None (Foundation rule)
+- **Integration**: Required for all template workflows
+
+### Automatic Application
+- **alwaysApply**: true - Ensures router is always active
+- **Priority**: 1 - Highest precedence in rule hierarchy
+- **Scope**: Global - Applies to all user interactions
+
+## Router Integration
+
+### Pre-Execution Checks
+Before any other rules are processed:
+
+1. **Router Initialization**: Ensure template router is loaded and ready
+2. **Context Validation**: Verify cursorContext.json exists and is valid
+3. **Mode Detection**: Prepare for intent analysis and mode selection
+4. **Template Availability**: Confirm all template rules are accessible
+
+### Execution Flow
+```
+User Request → Router Priority Rule → Template Router → Mode Selection → Template Execution
+```
+
+### Priority Enforcement
+- **First Read**: Router priority rule must be read before any other rules
+- **Mode Selection**: Template router determines appropriate mode before other rules apply
+- **Context Loading**: Ensures project context is available for informed decisions
+- **Template Routing**: Directs to appropriate template workflow
+
+## Integration with Template System
+
+### Template Router Activation
+When this rule is active:
+
+1. **Mode Detection**: Router analyzes user intent and selects appropriate mode
+2. **Template Loading**: Loads corresponding template rule from `.cursor/rules/templates-<mode>.mdc`
+3. **Context Integration**: Uses cursorContext.json for informed decisions
+4. **Workflow Execution**: Executes template-specific workflow
+
+### Template Workflow Integration
+- **Request Mode**: General task implementation and feature development
+- **Debug Mode**: Error troubleshooting and systematic debugging
+- **Setup Mode**: Project initialization and environment setup
+- **All Other Modes**: Specialized workflows for specific tasks
+
+## Context Management
+
+### Router Context Requirements
+The router priority rule ensures:
+
+1. **Context Availability**: cursorContext.json is loaded and accessible
+2. **Template Registry**: All available templates are registered and accessible
+3. **Usage Tracking**: Mode usage statistics are maintained
+4. **History Management**: Recent activities are tracked for context
+
+### Context Validation
+Before template execution:
+
+- **File Existence**: Verify cursorContext.json exists
+- **JSON Validity**: Ensure proper JSON structure
+- **Template Availability**: Confirm requested template exists
+- **Context Completeness**: Validate required context fields
+
+## Error Handling
+
+### Router Failures
+If router priority rule fails:
+
+1. **Fallback Mode**: Default to Request mode
+2. **Context Recovery**: Attempt to restore context from backup
+3. **Template Loading**: Load default template if specific one unavailable
+4. **Error Logging**: Record failure for debugging
+
+### Priority Conflicts
+If multiple rules claim priority:
+
+1. **Router Priority**: This rule always takes precedence
+2. **Template Selection**: Router determines appropriate template
+3. **Rule Integration**: Other rules integrate with selected template
+4. **Conflict Resolution**: Router resolves conflicts in favor of template workflow
+
+## Performance Considerations
+
+### Optimization
+- **Lazy Loading**: Load router only when needed
+- **Caching**: Cache template registry for faster access
+- **Context Pruning**: Maintain context size constraints
+- **Template Preloading**: Preload frequently used templates
+
+### Resource Management
+- **Memory Usage**: Minimize router memory footprint
+- **Load Time**: Optimize router initialization time
+- **Context Size**: Maintain context file size limits
+- **Template Efficiency**: Ensure templates load efficiently
+
+## Integration Guidelines
+
+### Rule Dependencies
+This rule establishes the foundation for:
+
+- **All Template Rules**: Depend on router priority for execution
+- **Context Analysis**: Integrates with context management
+- **Mode Selection**: Provides intelligent mode routing
+- **Workflow Execution**: Enables template-specific workflows
+
+### Template Compatibility
+All templates must:
+
+1. **Respect Priority**: Acknowledge router priority rule
+2. **Follow Workflow**: Execute template-specific workflows
+3. **Update Context**: Maintain cursorContext.json
+4. **Report Status**: Provide execution status and results
+
+## Usage Examples
+
+### Explicit Mode Tags
+```
+[MODE: Request] Add user authentication
+[MODE: Debug] Fix login form issues
+[MODE: Setup] Initialize new project
+```
+
+### Natural Language
+```
+Add user authentication to the API
+Fix the login form issues
+Set up a new React project
+```
+
+### Context-Aware Routing
+- **File Types**: Automatic mode selection based on file context
+- **Technical Terms**: Intelligent routing based on technical keywords
+- **Action Patterns**: Mode selection based on user intent patterns
+
+## Maintenance
+
+### Rule Updates
+- **Version Control**: Track router priority rule changes
+- **Compatibility**: Ensure compatibility with template updates
+- **Performance**: Monitor and optimize router performance
+- **Integration**: Maintain integration with other rules
+
+### Documentation
+- **Usage Guidelines**: Keep usage examples current
+- **Integration Docs**: Maintain integration documentation
+- **Troubleshooting**: Provide troubleshooting guides
+- **Best Practices**: Document best practices for rule usage
+
+## Conclusion
+
+The Router Priority Rule ensures that the Cursor Template Router System is the first rule read in the hierarchy, establishing proper precedence for intelligent mode selection and template routing. This rule is essential for the proper functioning of the entire template system and must be maintained with highest priority.
